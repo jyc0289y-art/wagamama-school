@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>와가마마스쿨 — 원장님 소통 창구</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#5464AE">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<style>/* 와가마마스쿨 원장님 인터뷰 — 자립 페이지 (본 사이트 CSS 비의존)
+   모바일 우선: 카톡 링크로 열릴 것을 전제로 설계 */
+:root{
+  --indigo:#5464AE; --indigo-deep:#3A4682; --indigo-sumi:#2C3563; --tint:#F3F4FB;
+  --washi:#FAF7F0; --paper:#fff; --line:#E7E2D9;
+  --ink:#1F2333; --soft:#5A5750;
+  --cta:#B84A28; --ok:#1F7A4D;
+  --font:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  --jp:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",var(--font);
+}
+/* :not([data-theme="light"]) — 라이트 강제 탈출구. 없으면 캡처·검증 도구가 다크만 찍는다 */
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --washi:#141724; --paper:#1B1F30; --line:#2E3348; --tint:#22273C;
+  --ink:#E9EAF2; --soft:#A9A49B; --indigo:#A6B2E8; --indigo-deep:#C2CBF0; --cta:#EE9E75;
+}}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--washi);color:var(--ink);font-family:var(--font);
+     font-size:16.5px;line-height:1.75;word-break:keep-all;-webkit-text-size-adjust:100%}
+.wrap{max-width:760px;margin:0 auto;padding:0 18px}
+h1,h2,h3{line-height:1.3;letter-spacing:-.02em;margin:0}
+p{margin:0 0 1em}
+
+.top{background:linear-gradient(150deg,#3A4682,#5464AE);color:#fff;padding:34px 0 30px}
+.top .wrap{display:block}
+.top .badge{display:inline-block;background:rgba(255,255,255,.18);border-radius:99px;
+  padding:5px 14px;font-size:12.5px;font-weight:700;letter-spacing:.06em;margin-bottom:14px}
+.top h1{font-size:clamp(23px,5.4vw,32px);color:#fff;margin-bottom:12px}
+.top p{color:rgba(255,255,255,.9);font-size:15.5px;margin:0;line-height:1.8}
+
+.intro{background:var(--paper);border:1px solid var(--line);border-radius:14px;
+  padding:20px 20px;margin:22px 0 8px;font-size:15.5px;line-height:1.85}
+.intro b{color:var(--indigo-deep)}
+.intro ul{margin:10px 0 0;padding-left:20px}
+.intro li{margin:4px 0}
+
+.sec{margin:34px 0 0}
+.sec__lab{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.sec__num{width:26px;height:26px;border-radius:50%;background:var(--indigo);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex:0 0 auto}
+.sec__lab h2{font-size:19px}
+.sec__desc{color:var(--soft);font-size:14.5px;margin:0 0 16px;padding-left:36px}
+
+.q{background:var(--paper);border:1px solid var(--line);border-radius:14px;
+   padding:18px 18px 16px;margin-bottom:12px}
+.q.done{border-color:#A8D5BA;background:color-mix(in srgb,var(--ok) 5%,var(--paper))}
+.q__t{font-weight:700;font-size:16.5px;margin-bottom:5px}
+.q__h{color:var(--soft);font-size:14px;line-height:1.7;margin-bottom:12px}
+.q__h em{color:var(--indigo-deep);font-style:normal;font-weight:600}
+textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 13px;
+  font-family:inherit;font-size:15.5px;line-height:1.7;color:var(--ink);background:var(--washi);
+  resize:vertical;min-height:88px}
+textarea:focus{outline:2px solid var(--indigo);outline-offset:1px;border-color:var(--indigo)}
+input[type=text]{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 13px;
+  font-family:inherit;font-size:15.5px;color:var(--ink);background:var(--washi)}
+input[type=text]:focus{outline:2px solid var(--indigo);outline-offset:1px}
+
+/* 예문 수집 — 이 페이지의 핵심 */
+.ex{background:var(--tint);border:1.5px solid var(--indigo);border-radius:14px;padding:18px;margin-bottom:12px}
+.ex__hd{font-weight:800;color:var(--indigo-deep);font-size:17px;margin-bottom:6px}
+.ex__hint{font-size:14.5px;color:var(--soft);line-height:1.75;margin-bottom:14px}
+.ex__sample{background:var(--paper);border-radius:10px;padding:12px 14px;font-size:14px;
+  margin-bottom:16px;border:1px dashed var(--indigo)}
+.ex__sample b{color:var(--indigo-deep)}
+.ex__sample .jp{font-family:var(--jp);font-weight:600}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;
+  padding:14px;margin-bottom:10px;position:relative}
+.card h4{margin:0 0 10px;font-size:14px;color:var(--indigo-deep);font-weight:800}
+.card .row{margin-bottom:9px}
+.card label{display:block;font-size:13px;font-weight:700;color:var(--soft);margin-bottom:4px}
+.card .del{position:absolute;top:10px;right:10px;background:transparent;border:0;
+  color:var(--soft);font-size:19px;cursor:pointer;line-height:1;padding:2px 6px}
+.card .del:hover{color:var(--cta)}
+.addbtn{width:100%;border:1.5px dashed var(--indigo);background:transparent;color:var(--indigo-deep);
+  border-radius:12px;padding:13px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer}
+.addbtn:hover{background:var(--paper)}
+
+.bar{position:sticky;bottom:0;background:color-mix(in srgb,var(--washi) 95%,transparent);
+  backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:12px 0;margin-top:30px;z-index:10}
+.bar .wrap{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.prog{flex:1;min-width:130px;font-size:14px;color:var(--soft)}
+.prog b{color:var(--indigo-deep);font-size:17px}
+.btn{border:0;border-radius:10px;padding:12px 18px;font-family:inherit;font-size:15px;
+  font-weight:700;cursor:pointer}
+.btn--go{background:var(--cta);color:#fff}
+.btn--sub{background:var(--tint);color:var(--indigo-deep)}
+.st{font-size:12.5px;padding:4px 9px;border-radius:6px;width:100%}
+.st.ok{background:color-mix(in srgb,var(--ok) 12%,transparent);color:var(--ok)}
+.st.bad{background:#FDECEA;color:#B3261E}
+.done-msg{background:color-mix(in srgb,var(--ok) 10%,transparent);border:1px solid var(--ok);
+  border-radius:12px;padding:14px 16px;margin:14px 0 0;font-size:15px;color:var(--ok);display:none}
+footer{padding:26px 0 60px;color:var(--soft);font-size:13.5px;text-align:center}
+footer a{color:var(--indigo-deep)}
+
+/* ── 탭 ── */
+.tabs{display:flex;gap:7px;margin:18px 0 4px;position:sticky;top:0;z-index:20;
+  background:color-mix(in srgb,var(--washi) 94%,transparent);backdrop-filter:blur(10px);
+  padding:10px 0 9px;border-bottom:1px solid var(--line)}
+.tabbtn{flex:1;border:1.5px solid var(--line);background:var(--paper);color:var(--soft);
+  border-radius:12px;padding:11px 8px;font-family:inherit;font-size:14.5px;font-weight:700;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
+.tabbtn__n{font-size:11.5px;font-weight:800;background:var(--tint);color:var(--indigo-deep);
+  border-radius:99px;padding:1px 7px;min-width:20px}
+.tabbtn[aria-selected="true"] .tabbtn__n{background:rgba(255,255,255,.25);color:#fff}
+@media(max-width:430px){.tabbtn{font-size:13.5px;padding:10px 6px}}
+.tabbtn[aria-selected="true"]{background:var(--indigo);border-color:var(--indigo);color:#fff}
+/* ── 디자인 카드 ── */
+.dcard{background:var(--paper);border:1px solid var(--line);border-radius:14px;
+  padding:16px;margin-bottom:14px}
+.dcard.picked{border-color:var(--indigo);box-shadow:0 0 0 3px color-mix(in srgb,var(--indigo) 22%,transparent)}
+.dcard__hd{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.dcard__n{font-weight:800;font-size:17px;margin-right:8px}
+.dcard__tag{font-size:13px;color:var(--soft)}
+.dcard__full{font-size:13.5px;color:var(--indigo-deep);font-weight:700;white-space:nowrap}
+.dcard__imgwrap{display:block;position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.dcard__imgwrap img{width:100%;height:auto;display:block}
+.dcard__zoom{position:absolute;right:8px;bottom:8px;background:rgba(29,30,46,.72);color:#fff;
+  font-size:12px;font-weight:700;padding:5px 11px;border-radius:99px}
+.dcard__desc{font-size:15px;line-height:1.72;margin:12px 0 4px}
+.dcard__note{font-size:13.5px;color:var(--soft);margin:0 0 12px}
+.dpick{display:flex}
+.dopt{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;
+  border:1.5px solid var(--line);border-radius:10px;padding:11px;font-weight:700;font-size:15px}
+.dopt:has(input:checked){background:var(--tint);border-color:var(--indigo);color:var(--indigo-deep)}
+
+/* ── 회차 누적 (지난 회신) ── */
+.pastwrap{margin:22px 0 6px}
+.pasth{font-size:16px;color:var(--soft);margin:0 0 10px;font-weight:700}
+.past{background:var(--paper);border:1px solid var(--line);border-radius:12px;margin-bottom:8px}
+.past summary{cursor:pointer;padding:13px 16px;font-weight:700;font-size:15px;list-style:none;
+  display:flex;justify-content:space-between;gap:10px;align-items:center}
+.past summary::-webkit-details-marker{display:none}
+.past summary::after{content:"▾";color:var(--indigo);font-size:14px}
+.past[open] summary::after{content:"▴"}
+.past__d{font-size:13px;color:var(--soft);font-weight:500}
+.past__b{padding:0 16px 14px}
+.pa{border-top:1px dashed var(--line);padding:10px 0}
+.pa b{display:block;font-size:13.5px;color:var(--indigo-deep);margin-bottom:4px}
+.pa p{margin:0;font-size:14.5px;white-space:pre-wrap}
+.pa ul{margin:6px 0 0;padding-left:18px;font-size:14px}
+.ex__must{font-weight:600;font-size:13px;color:var(--cta);
+  background:color-mix(in srgb,var(--cta) 12%,transparent);padding:2px 9px;border-radius:99px;margin-left:6px}
+.intro__note{margin:12px 0 0;font-size:14.5px;color:var(--soft)}
+.dgrid{display:grid;gap:14px}
+@media(min-width:820px){.dgrid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="wrap">
+    <span class="badge">와가마마스쿨 홈페이지 제작 · 제1차</span>
+    <h1>학원 이야기와 진짜 일본어</h1>
+    <p>홈페이지에 <b>원장님의 생각</b>을 담기 위한 첫 질문입니다. 지금 올라가 있는 문구는 제가 형태만 잡아 둔 것이라, 원장님 말씀으로 바꿔야 진짜 홈페이지가 됩니다.</p>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="tabs" role="tablist" aria-label="화면 선택">
+    <button class="tabbtn" role="tab" aria-selected="true" id="tb-q" aria-controls="pane-q"
+            onclick="showPane('q')">📝 이번 질문<span class="tabbtn__n">17</span></button>
+    <button class="tabbtn" role="tab" aria-selected="false" id="tb-d" aria-controls="pane-d"
+            onclick="showPane('d')">🎨 디자인<span class="tabbtn__n">4</span></button>
+    
+  </div>
+
+<div id="pane-q" role="tabpanel" aria-labelledby="tb-q">
+  <div class="intro">
+    <b>편하게 답해주시면 됩니다.</b>
+    <ul>
+      <li>말씀하시듯 편하게 쓰셔도 됩니다 — 문장 다듬는 건 저희가 합니다</li>
+      <li><b>한 번에 다 안 하셔도 됩니다.</b> 쓰시는 대로 저장되어, 창을 닫았다 다시 오셔도 이어서 쓰실 수 있습니다</li>
+      <li>모르시거나 답하기 어려운 항목은 <b>비워두셔도</b> 됩니다</li>
+      <li>다 쓰신 뒤 맨 아래 <b>「답변 복사하기」</b>를 누르고, 복사된 내용을 보내주시면 됩니다</li>
+    </ul>
+    <p class="intro__note">※ 특히 <b>2번(교과서와 실제 일본어의 차이)</b>이 가장 중요합니다.
+      이 학원의 핵심이라 홈페이지에서 가장 크게 다룰 부분입니다.</p>
+  </div>
+
+  <div class="sec">
+  <div class="sec__lab"><span class="sec__num">1</span><h2>학원 이야기</h2></div>
+  <p class="sec__desc">홈페이지 첫 화면과 소개 글의 바탕이 됩니다.</p>
+  <div class="q" id="q-q1">
+  <div class="q__t">이 학원을 시작하신 계기가 있으신가요?</div><div class="q__h">2014년 당시 어떤 생각으로 시작하셨는지. <em>「일본어를 이렇게 가르치고 싶다」</em>는 게 있으셨다면 그 이야기가 홈페이지의 뿌리가 됩니다.</div>
+  <textarea data-a="q1" placeholder="예: 저도 일본어를 배웠는데 교실에서 배운 말이 현지에서 안 통해서…"></textarea>
+</div><div class="q" id="q-q2">
+  <div class="q__t">‘와가마마(わがまま)’라는 이름은 어떻게 지으셨나요?</div><div class="q__h">일본어로는 ‘제멋대로’라는 뜻인데, 학원 이름으로 쓰신 데는 이유가 있을 것 같습니다. <em>브랜드 이야기</em>가 되면 기억에 남는 홈페이지가 됩니다. 특별한 유래가 없으시면 없다고만 적어주셔도 됩니다.</div>
+  <textarea data-a="q2" placeholder="예: 하고 싶은 말을 마음껏 하라는 뜻으로…"></textarea>
+</div><div class="q" id="q-q3">
+  <div class="q__t">10년 넘게 하시면서 <b>한 번도 바꾸지 않은 것</b>이 있다면?</div><div class="q__h">수업 방식이든 원칙이든 습관이든. <em>오래 지킨 것</em>은 그 자체로 신뢰가 됩니다.</div>
+  <textarea data-a="q3" placeholder=""></textarea>
+</div>
+</div><div class="sec">
+  <div class="sec__lab"><span class="sec__num">2</span><h2>교과서 일본어 vs 실제 일본어</h2></div>
+  <p class="sec__desc">이 학원의 핵심이자, 홈페이지에서 가장 크게 다룰 부분입니다.</p>
+  <div class="q" id="q-q4">
+  <div class="q__t">수강생이 <b>“교과서대로 말했는데 일본인이 이상하게 봤다”</b>고 한 적이 있나요?</div><div class="q__h">실제로 있었던 일이면 더 좋습니다. 이런 이야기 하나가 설명 열 줄보다 강합니다.</div>
+  <textarea data-a="q4" placeholder=""></textarea>
+</div><div class="ex">
+  <div class="ex__hd">📝 예문을 알려주세요 <span class="ex__must">가장 중요</span></div>
+  <div class="ex__hint">
+    <b>교과서에서 배우는 말</b>과 <b>일본인이 실제로 쓰는 말</b>이 다른 예를 알려주세요.
+    홈페이지에서 이걸 나란히 보여주는 것이 이 학원을 설명하는 가장 좋은 방법이라고 생각합니다.<br>
+    <b>많을수록 좋습니다.</b> 아래 「예문 추가」를 눌러 계속 넣으실 수 있습니다.
+  </div>
+  <div class="ex__sample">
+    <b>이런 식으로 적어주시면 됩니다</b><br>
+    · 상황: 처음 만나 이름을 알게 된 순간<br>
+    · 교과서: <span class="jp">はじめまして。私はキムです。よろしくお願いします。</span><br>
+    · 실제: <span class="jp">キムです。よろしく〜</span><br>
+    · 차이: 또래끼리는 정중형을 길게 늘이지 않는다. 딱딱하게 들린다.
+  </div>
+  <div id="exlist"></div>
+  <button type="button" class="addbtn" onclick="addEx()">＋ 예문 추가</button>
+</div><div class="q" id="q-q5">
+  <div class="q__t">한국 사람이 일본어 할 때 <b>가장 흔히 하는 실수</b>는 무엇인가요?</div><div class="q__h">발음·조사·경어·억양 무엇이든. <em>한국어 화자라서</em> 생기는 실수라면 더 좋습니다.</div>
+  <textarea data-a="q5" placeholder=""></textarea>
+</div><div class="q" id="q-q6">
+  <div class="q__t"><b>이것만 고쳐도 확 달라진다</b> 하는 게 있다면?</div><div class="q__h">수업에서 자주 강조하시는 것 하나.</div>
+  <textarea data-a="q6" placeholder=""></textarea>
+</div>
+</div><div class="sec">
+  <div class="sec__lab"><span class="sec__num">3</span><h2>수업 밖 — 소풍·수학여행·운동회</h2></div>
+  <p class="sec__desc">다른 학원에 없는 부분이라 홈페이지에서 크게 다루려 합니다.</p>
+  <div class="q" id="q-q7">
+  <div class="q__t">이 행사들은 어떻게 시작됐나요?</div><div class="q__h">처음에 어떤 계기로 시작하셨고, 지금은 <em>얼마나 자주</em> 하시는지.</div>
+  <textarea data-a="q7" placeholder=""></textarea>
+</div><div class="q" id="q-q8">
+  <div class="q__t">함께하시는 <b>일본인분들</b>은 어떤 분들인가요?</div><div class="q__h">재한 일본인 모임인지, 자매 학원인지, 선생님 지인인지. 그리고 <em>수학여행은 실제로 일본에 가시는지</em> 국내인지.</div>
+  <textarea data-a="q8" placeholder=""></textarea>
+</div><div class="q" id="q-q9">
+  <div class="q__t">그날들 중 <b>기억에 남는 장면</b> 하나만 들려주세요.</div><div class="q__h">교실에서 연습한 말을 처음 써 본 순간이라든지. <em>이야기 하나가 사진 열 장을 대신</em>합니다.</div>
+  <textarea data-a="q9" placeholder=""></textarea>
+</div>
+</div><div class="sec">
+  <div class="sec__lab"><span class="sec__num">4</span><h2>수강생</h2></div>
+  <p class="sec__desc">홈페이지를 볼 사람이 “나 같은 사람이 다니는 곳이구나”를 알게 하는 부분입니다.</p>
+  <div class="q" id="q-q10">
+  <div class="q__t">주로 어떤 분들이 오시나요?</div><div class="q__h">연령대·직업·일본어를 배우는 이유 등 대략적으로.</div>
+  <textarea data-a="q10" placeholder=""></textarea>
+</div><div class="q" id="q-q11">
+  <div class="q__t">어떤 분에게 특히 잘 맞고, <b>어떤 분에게는 안 맞나요?</b></div><div class="q__h"><em>안 맞는 쪽을 솔직히 밝히는 것</em>이 오히려 신뢰를 만듭니다.</div>
+  <textarea data-a="q11" placeholder=""></textarea>
+</div><div class="q" id="q-q12">
+  <div class="q__t">처음 오시는 분들이 가장 걱정하는 건 무엇인가요? 뭐라고 답해주시나요?</div><div class="q__h">그대로 홈페이지 <em>자주 묻는 질문</em>에 넣겠습니다.</div>
+  <textarea data-a="q12" placeholder=""></textarea>
+</div>
+</div><div class="sec">
+  <div class="sec__lab"><span class="sec__num">5</span><h2>확인이 필요한 사실</h2></div>
+  <p class="sec__desc">지금 홈페이지에 제가 <b>추측으로 적어 둔</b> 것들입니다. 틀린 게 있으면 알려주세요.</p>
+  <div class="q" id="q-q13">
+  <div class="q__t">아래 내용이 맞습니까?</div><div class="q__h">① <b>2014년 개원</b> (로고 리본의 숫자를 보고 적었습니다)<br>② 한 반 <b>10명 내외</b> 소그룹<br>③ 수업은 <b>한국인 선생님</b>이 진행<br>④ 수강생은 <b>대학생·직장인</b>이 주류<br>⑤ 수강료는 <b>홈페이지에 공개하지 않고</b> 상담 시 안내</div>
+  <textarea data-a="q13" placeholder="맞으면 &#x27;전부 맞음&#x27;, 틀리면 번호와 맞는 내용을 적어주세요"></textarea>
+</div><div class="q" id="q-q14">
+  <div class="q__t">홈페이지에 실을 정보</div><div class="q__h">주소 · 전화번호 · <em>카카오톡 채널 주소</em> · 수업 요일과 시간대 · 반 구성</div>
+  <textarea data-a="q14" placeholder="예)
+주소:
+전화:
+카카오톡 채널:
+수업 시간:"></textarea>
+</div><div class="q" id="q-q15">
+  <div class="q__t">선생님 소개를 짧게 부탁드립니다</div><div class="q__h">성함(또는 표기하실 호칭) · 경력 · 한 줄 소개. <em>공개를 원치 않으시면 비워두셔도</em> 됩니다.</div>
+  <textarea data-a="q15" placeholder=""></textarea>
+</div>
+</div><div class="sec">
+  <div class="sec__lab"><span class="sec__num">6</span><h2>마지막으로</h2></div>
+  
+  <div class="q" id="q-q16">
+  <div class="q__t">홈페이지에 <b>꼭 넣고 싶은 말</b>이 있으신가요?</div><div class="q__h">수강을 고민하는 분에게 하고 싶은 한마디여도 좋습니다.</div>
+  <textarea data-a="q16" placeholder=""></textarea>
+</div><div class="q" id="q-q17">
+  <div class="q__t">그 밖에 하고 싶으신 말씀</div><div class="q__h">무엇이든 좋습니다.</div>
+  <textarea data-a="q17" placeholder=""></textarea>
+</div>
+</div>
+</div>
+
+<div id="pane-d" role="tabpanel" aria-labelledby="tb-d" hidden>
+  <div class="intro">
+    <b>홈페이지 디자인 4가지를 만들어 봤습니다.</b>
+    <p style="margin:10px 0 0">내용(문구·사진)은 <b>네 개가 전부 똑같습니다.</b> 보이는 방식만 다릅니다.
+      마음에 드는 것을 골라주시면 그 방향으로 다듬겠습니다.
+      「전체 보기」를 누르면 실제 화면을 끝까지 내려 보실 수 있습니다.</p>
+    <p class="intro__note">※ 지금 홈페이지는 <b>②번 방향</b>으로 올라가 있습니다.
+      다른 게 나으시면 알려주세요 — 바꿀 수 있습니다.</p>
+  </div>
+  <div class="sec">
+  <div class="sec__lab"><h2>홈페이지 디자인</h2></div>
+  <p class="sec__desc">네 가지 방향을 만들어 봤습니다. 내용은 전부 같고 보이는 방식만 다릅니다.</p>
+  <div class="dgrid">
+  <div class="dcard" id="d1">
+    <div class="dcard__hd">
+      <div><span class="dcard__n">① 에디토리얼</span><span class="dcard__tag">잡지 조판</span></div>
+      <a class="dcard__full" href="../designs/1/" target="_blank" rel="noopener">전체 보기 ↗</a>
+    </div>
+    <a href="../designs/1/" target="_blank" rel="noopener" class="dcard__imgwrap">
+      <img src="../designs/preview1.jpg" alt="① 에디토리얼 시안" width="760" height="713" loading="lazy">
+      <span class="dcard__zoom">눌러서 전체 보기</span>
+    </a>
+    <p class="dcard__desc">큰 글씨와 가는 선으로 정갈하게. 사진이 화면 오른쪽 끝까지 시원하게 잘려 나갑니다.</p>
+    <p class="dcard__note">정갈하고 차분함 · 다소 차가울 수 있음</p>
+    <label class="dopt"><input type="radio" name="pick" value="① 에디토리얼" onchange="touch()"><span>이게 좋습니다</span></label>
+  </div>
+  <div class="dcard" id="d2">
+    <div class="dcard__hd">
+      <div><span class="dcard__n">② 종이와 명조</span><span class="dcard__tag">종이 · 붓글씨 느낌</span></div>
+      <a class="dcard__full" href="../designs/2/" target="_blank" rel="noopener">전체 보기 ↗</a>
+    </div>
+    <a href="../designs/2/" target="_blank" rel="noopener" class="dcard__imgwrap">
+      <img src="../designs/preview2.jpg" alt="② 종이와 명조 시안" width="760" height="713" loading="lazy">
+      <span class="dcard__zoom">눌러서 전체 보기</span>
+    </a>
+    <p class="dcard__desc">미색 종이에 인쇄한 느낌. 「일본어」 한 구절만 붓글씨체로 바꾸고 낙관 도장을 찍었습니다.</p>
+    <p class="dcard__note">따뜻하고 일본스러움 · 현재 적용 중</p>
+    <label class="dopt"><input type="radio" name="pick" value="② 종이와 명조" onchange="touch()"><span>이게 좋습니다</span></label>
+  </div>
+  <div class="dcard" id="d3">
+    <div class="dcard__hd">
+      <div><span class="dcard__n">③ 괘선과 세로쓰기</span><span class="dcard__tag">일본 미술관식</span></div>
+      <a class="dcard__full" href="../designs/3/" target="_blank" rel="noopener">전체 보기 ↗</a>
+    </div>
+    <a href="../designs/3/" target="_blank" rel="noopener" class="dcard__imgwrap">
+      <img src="../designs/preview3.jpg" alt="③ 괘선과 세로쓰기 시안" width="760" height="713" loading="lazy">
+      <span class="dcard__zoom">눌러서 전체 보기</span>
+    </a>
+    <p class="dcard__desc">가는 세로선 격자를 깔고, 일본어를 세로로 세워 문장 길이 차이를 눈으로 보이게 했습니다.</p>
+    <p class="dcard__note">정밀하고 격이 있음 · 다소 금욕적</p>
+    <label class="dopt"><input type="radio" name="pick" value="③ 괘선과 세로쓰기" onchange="touch()"><span>이게 좋습니다</span></label>
+  </div>
+  <div class="dcard" id="d4">
+    <div class="dcard__hd">
+      <div><span class="dcard__n">④ 브랜드 색면</span><span class="dcard__tag">학원 색으로 채움</span></div>
+      <a class="dcard__full" href="../designs/4/" target="_blank" rel="noopener">전체 보기 ↗</a>
+    </div>
+    <a href="../designs/4/" target="_blank" rel="noopener" class="dcard__imgwrap">
+      <img src="../designs/preview4.jpg" alt="④ 브랜드 색면 시안" width="760" height="713" loading="lazy">
+      <span class="dcard__zoom">눌러서 전체 보기</span>
+    </a>
+    <p class="dcard__desc">학원 로고 색(남보라)으로 화면을 크게 채웁니다. 가장 눈에 띄고 또렷합니다.</p>
+    <p class="dcard__note">강하고 현대적 · 사진이 색에 가려질 수 있음</p>
+    <label class="dopt"><input type="radio" name="pick" value="④ 브랜드 색면" onchange="touch()"><span>이게 좋습니다</span></label>
+  </div></div><div class="q" id="q-d_why">
+  <div class="q__t">고르신 이유나, 고쳤으면 하는 점이 있으신가요?</div><div class="q__h">「글씨가 너무 크다」「사진을 더 크게」처럼 편하게 적어주시면 됩니다.</div>
+  <textarea data-a="d_why" placeholder=""></textarea>
+</div>
+</div>
+</div>
+
+
+
+  <div class="done-msg" id="done">
+    복사되었습니다. <b>붙여넣기로 보내주시면</b> 홈페이지에 반영하겠습니다. 감사합니다.
+  </div>
+</div>
+
+<div class="bar">
+  <div class="wrap">
+    <span class="prog"><b id="n">0</b> / <span id="tot">18</span> 항목 · 예문 <b id="exn">0</b>개</span>
+    <button class="btn btn--go" onclick="copyAll()">📋 답변 복사하기</button>
+    <button class="btn btn--sub" onclick="saveFile()">💾 파일로</button>
+    <span class="st ok" id="st">…</span>
+  </div>
+</div>
+
+<footer>
+  와가마마스쿨 · Wagamama School<br>
+  <a href="../">홈페이지 보기</a>
+</footer>
+
+<script>
+var ROUND = 1;
+var QTITLES = {q1: "이 학원을 시작하신 계기가 있으신가요?", q2: "‘와가마마(わがまま)’라는 이름은 어떻게 지으셨나요?", q3: "10년 넘게 하시면서 한 번도 바꾸지 않은 것이 있다면?", q4: "수강생이 “교과서대로 말했는데 일본인이 이상하게 봤다”고 한 적이 있나요?", q5: "한국 사람이 일본어 할 때 가장 흔히 하는 실수는 무엇인가요?", q6: "이것만 고쳐도 확 달라진다 하는 게 있다면?", q7: "이 행사들은 어떻게 시작됐나요?", q8: "함께하시는 일본인분들은 어떤 분들인가요?", q9: "그날들 중 기억에 남는 장면 하나만 들려주세요.", q10: "주로 어떤 분들이 오시나요?", q11: "어떤 분에게 특히 잘 맞고, 어떤 분에게는 안 맞나요?", q12: "처음 오시는 분들이 가장 걱정하는 건 무엇인가요? 뭐라고 답해주시나요?", q13: "아래 내용이 맞습니까?", q14: "홈페이지에 실을 정보", q15: "선생님 소개를 짧게 부탁드립니다", d_why: "고르신 이유나, 고쳤으면 하는 점이 있으신가요?", q16: "홈페이지에 꼭 넣고 싶은 말이 있으신가요?", q17: "그 밖에 하고 싶으신 말씀"};
+(function(){
+
+  var KEY='WGM_interview_r'+ROUND;
+  var EX=document.getElementById('exlist');
+
+  window.addEx=function(v){
+    var i=EX.children.length;
+    var d=document.createElement('div');
+    d.className='card';
+    d.innerHTML='<h4>예문 '+(i+1)+'</h4>'+
+      '<button type="button" class="del" onclick="delEx(this)" aria-label="삭제">×</button>'+
+      '<div class="row"><label>어떤 상황인가요?</label><input type="text" data-e="sit" placeholder="예: 같이 밥 먹다가 맛있을 때"></div>'+
+      '<div class="row"><label>교과서에서 배우는 말</label><input type="text" data-e="book" placeholder="とてもおいしいです。"></div>'+
+      '<div class="row"><label>일본인이 실제로 쓰는 말</label><input type="text" data-e="real" placeholder="これ、めっちゃおいしい！"></div>'+
+      '<div class="row"><label>무엇이 다른가요? (선택)</label><input type="text" data-e="why" placeholder="とても는 글에서 쓰는 말이라 대화에서는 딱딱하게 들린다"></div>';
+    EX.appendChild(d);
+    d.querySelectorAll('input').forEach(function(el){ el.addEventListener('input',touch); });
+    if(v){ ['sit','book','real','why'].forEach(function(k){
+      var el=d.querySelector('[data-e="'+k+'"]'); if(el&&v[k]) el.value=v[k]; }); }
+    renum(); touch();
+  };
+  window.delEx=function(b){ b.parentNode.remove(); renum(); touch(); };
+  function renum(){ Array.prototype.forEach.call(EX.children,function(c,i){
+    c.querySelector('h4').textContent='예문 '+(i+1); }); }
+
+  function collect(){
+    var o={answers:{},examples:[]};
+    document.querySelectorAll('[data-a]').forEach(function(t){ o.answers[t.dataset.a]=t.value; });
+    var pk=document.querySelector('input[name="pick"]:checked');
+    o.pick = pk ? pk.value : '';
+    Array.prototype.forEach.call(EX.children,function(c){
+      var e={};
+      c.querySelectorAll('[data-e]').forEach(function(i){ e[i.dataset.e]=i.value; });
+      if(e.sit||e.book||e.real) o.examples.push(e);
+    });
+    return o;
+  }
+
+  function mark(){
+    var n=0;
+    document.querySelectorAll('[data-a]').forEach(function(t){
+      var f=t.value.trim().length>0; if(f) n++;
+      var q=t.closest('.q'); if(q) q.classList.toggle('done',f);
+    });
+    document.querySelectorAll('.dcard').forEach(function(c){
+      var r=c.querySelector('input[name="pick"]'); c.classList.toggle('picked', !!(r&&r.checked));
+    });
+    var ex=collect().examples.length;
+    document.getElementById('n').textContent=n;
+    document.getElementById('exn').textContent=ex;
+    return n;
+  }
+
+  function stat(m,ok){ var e=document.getElementById('st');
+    e.textContent=m; e.className='st '+(ok?'ok':'bad'); }
+
+  function save(){
+    try{ localStorage.setItem(KEY,JSON.stringify({t:new Date().toISOString(),d:collect()}));
+      var n=new Date();
+      stat('자동 저장됨 '+String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0'),true);
+    }catch(e){ stat('⚠️ 자동 저장이 막혀 있습니다 — 다 쓰신 뒤 꼭 [답변 복사하기]를 눌러 주세요',false); }
+  }
+  function touch(){ mark(); save(); }
+  window.touch=touch;
+
+  function text(){
+    var d=collect();
+    var L=['## 와가마마스쿨 — 원장님 회신 (제'+ROUND+'차)',''];
+    if(d.pick){ L.push('### 고르신 디자인'); L.push('**'+d.pick+'**'); L.push(''); }
+    var T=QTITLES;
+    Object.keys(T).forEach(function(k){
+      var v=(d.answers[k]||'').trim(); if(!v) return;
+      L.push('### '+T[k]); L.push(v); L.push('');
+    });
+    if(d.examples.length){
+      L.push('### 교과서 vs 실제 일본어 — 예문 '+d.examples.length+'개'); L.push('');
+      d.examples.forEach(function(e,i){
+        L.push('**'+(i+1)+'. '+(e.sit||'(상황 미기재)')+'**');
+        if(e.book) L.push('- 교과서: '+e.book);
+        if(e.real) L.push('- 실제: '+e.real);
+        if(e.why)  L.push('- 차이: '+e.why);
+        L.push('');
+      });
+    }
+    return L.join('\n');
+  }
+  /* 탭 — 누적 창구의 항행 척추. 회차가 쌓여도 각 탭은 짧게 유지된다. */
+  window.showPane=function(k){
+    ['q','d','p'].forEach(function(x){
+      var pane=document.getElementById('pane-'+x), btn=document.getElementById('tb-'+x);
+      if(!pane||!btn) return;
+      pane.hidden = (x!==k);
+      btn.setAttribute('aria-selected', String(x===k));
+    });
+    window.scrollTo({top:0,behavior:'smooth'});
+    try{ localStorage.setItem(KEY+'_tab',k); }catch(e){}
+  };
+
+  window.copyAll=function(){
+    var t=text();
+    if(t.split('\n').length<=2){ stat('아직 작성된 내용이 없습니다',false); return; }
+    function done(){ var d=document.getElementById('done'); d.style.display='block';
+      stat('복사 완료 — 붙여넣어 보내주세요',true);
+      d.scrollIntoView({behavior:'smooth',block:'center'});
+      setTimeout(function(){ d.style.display='none'; },12000); }
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(t).then(done,function(){fb(t,done);});
+    } else fb(t,done);
+  };
+  function fb(t,cb){
+    var a=document.createElement('textarea'); a.value=t;
+    a.style.position='fixed'; a.style.opacity='0'; document.body.appendChild(a); a.select();
+    try{ document.execCommand('copy'); cb(); }
+    catch(e){ stat('복사 실패 — [파일로]를 이용해 주세요',false); }
+    document.body.removeChild(a);
+  }
+
+  window.saveFile=function(){
+    var b=new Blob([text()],{type:'text/plain;charset=utf-8'});
+    var a=document.createElement('a'); a.href=URL.createObjectURL(b);
+    a.download='와가마마스쿨_원장님_인터뷰.txt';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    stat('파일로 저장했습니다 — 그 파일을 보내주셔도 됩니다',true);
+  };
+
+  // 부팅
+  document.querySelectorAll('[data-a]').forEach(function(t){ t.addEventListener('input',touch); });
+  document.getElementById('tot').textContent=document.querySelectorAll('[data-a]').length;
+  var restored=false;
+  try{
+    var raw=localStorage.getItem(KEY);
+    if(raw){
+      var d=JSON.parse(raw).d;
+      Object.keys(d.answers||{}).forEach(function(k){
+        var el=document.querySelector('[data-a="'+k+'"]'); if(el) el.value=d.answers[k]; });
+      (d.examples||[]).forEach(function(e){ addEx(e); });
+      if(d.pick){ var r=document.querySelector('input[name="pick"][value="'+d.pick+'"]'); if(r) r.checked=true; }
+      restored=true;
+    }
+    localStorage.setItem(KEY+'__p','1'); localStorage.removeItem(KEY+'__p');
+    stat(restored?'지난번에 쓰시던 내용을 불러왔습니다':'자동 저장 켜짐 — 쓰시는 대로 저장됩니다',true);
+  }catch(e){
+    stat('⚠️ 이 브라우저는 자동 저장이 막혀 있습니다 — 다 쓰신 뒤 꼭 [답변 복사하기]를 눌러 주세요',false);
+  }
+  if(!EX.children.length){ addEx(); addEx(); addEx(); }
+  document.querySelectorAll('input[name="pick"]').forEach(function(r){ r.addEventListener('change',touch); });
+  try{
+    var t=(location.hash==='#designs'||location.hash==='#design')?'d':localStorage.getItem(KEY+'_tab');
+    if(t && document.getElementById('pane-'+t)) showPane(t);
+  }catch(e){}
+  document.querySelectorAll('input[name="pick"]').forEach(function(r){ r.addEventListener('change',touch); });
+  mark();
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,796 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>와가마마스쿨 · Wagamama School</title>
+<style>
+/* ============================================================
+   BOLD BRAND — 와가마마스쿨
+   축: #5464AE (정품 로고 픽셀 실측). 이 색이 페이지의 "종이"다.
+   ============================================================ */
+
+:root{
+  /* --- 브랜드 축 --- */
+  --brand:        #5464AE;   /* 실측 정본 */
+  --brand-deep:   #3A4682;   /* 필드용 심도 */
+  --brand-sumi:   #262E52;   /* 최심 잉크 필드 */
+  --brand-txt:    #5464AE;   /* 종이 위 본문용 — on #EFF0F7 = 4.85:1 (AA) */
+
+  /* --- 종이 · 잉크 (순백/순검 금지) --- */
+  --paper:        #EFF0F7;   /* 브랜드로 물들인 종이 */
+  --paper-2:      #E4E6F2;
+  --ink:          #171B31;   /* 브랜드로 물들인 검정 */
+  --ink-soft:     #4A5068;
+
+  /* --- 액센트: 배경 면적 0%. 인디고 필드 위 텍스트·1px 바에만 --- */
+  --acc:          #F5D547;   /* on --brand-deep = 6.03:1 (AA) */
+
+  --hair-l:       rgba(23,27,49,.16);
+  --hair-d:       rgba(255,255,255,.18);
+
+  /* --- 서체 --- */
+  --sans: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", Pretendard,
+          "Malgun Gothic", "맑은 고딕", "Noto Sans KR", system-ui, sans-serif;
+  --jp:   "Hiragino Kaku Gothic ProN", "Yu Gothic", YuGothic, "Noto Sans JP", sans-serif;
+  --jpm:  "Hiragino Mincho ProN", "Yu Mincho", YuMincho, "MS Mincho", serif;
+  --ens:  "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, "Times New Roman", serif;
+
+  /* --- 타입 사다리 --- */
+  --t-disp: clamp(54px, 9.4vw, 146px);   /* 라틴 전용 트랙 */
+  --t-h1:   clamp(31px, 5.55vw, 80px);   /* 한글 트랙 */
+  --t-h2:   clamp(25px, 3.7vw, 52px);
+  --t-h3:   clamp(19px, 2.1vw, 27px);
+  --t-lead: clamp(16.5px, 1.4vw, 18.5px);
+  --t-body: 16.5px;
+  --t-cap:  15px;
+  --t-mic:  12.5px;
+
+  /* --- 리듬 3단 --- */
+  --sec-sm: clamp(34px, 4.4vw, 56px);
+  --sec:    clamp(64px, 8vw, 108px);
+  --sec-xl: clamp(96px, 13vw, 176px);
+
+  --wrap:  1240px;
+  --pad:   clamp(20px, 5.6vw, 84px);
+  --ease:  cubic-bezier(.16,1,.3,1);
+
+  --stripe: repeating-linear-gradient(48deg,
+              rgba(255,255,255,.07) 0 13px, rgba(255,255,255,0) 13px 34px);
+  --stripe-l: repeating-linear-gradient(48deg,
+              rgba(84,100,174,.075) 0 13px, rgba(84,100,174,0) 13px 34px);
+}
+
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:      #0E1019;
+    --ink:        #E8EAF6;
+    --ink-soft:   #A6ABC4;
+    --brand-deep: #2B3462;   /* 페이지 배경보다 밝게 → 밴드가 증발하지 않음 */
+    --brand-sumi: #232B52;
+    --brand:      #5A6ABB;
+    --brand-txt:  #A6B2E8;   /* 다크 본문용 — on #0E1019 = 9.25:1 (AAA) */
+    --paper-2:    #1B2033;   /* 카드가 배경에 묻히지 않도록 명도차 확보 */
+    --hair-l:     rgba(232,234,246,.18);
+  }
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--sans); font-size:var(--t-body); line-height:1.75;
+  letter-spacing:-.003em; overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  word-break:keep-all;      /* 한글 어절 단위 줄바꿈 */
+}
+img{display:block; max-width:100%; height:auto; border-radius:0}
+a{color:inherit; text-decoration:none}
+h1,h2,h3,p{margin:0}
+
+.wrap{max-width:var(--wrap); margin-inline:auto; padding-inline:var(--pad)}
+
+/* 라틴 전용 런 — 한글 섞임 금지 */
+.en{font-family:var(--ens); font-weight:400; letter-spacing:-.01em}
+.jpm{font-family:var(--jpm)}
+
+.disp{
+  font-size:var(--t-disp); font-weight:800; line-height:.9;
+  letter-spacing:-.045em; margin:0;
+}
+.h2{
+  font-size:var(--t-h2); font-weight:800; line-height:1.2;
+  letter-spacing:-.026em;
+}
+.lead{font-size:var(--t-lead); line-height:1.78; letter-spacing:-.006em}
+.mic{
+  font-size:var(--t-mic); font-weight:700; letter-spacing:.19em;
+  text-transform:uppercase; font-family:var(--ens);
+}
+
+/* ---------- 모션 (3역할 분화) ---------- */
+.rv{opacity:0; transition:opacity .6s ease-in-out}
+.rv.in{opacity:1}
+.rv-up{opacity:0; transform:translateY(26px);
+  transition:opacity .7s var(--ease), transform .7s var(--ease)}
+.rv-up.in{opacity:1; transform:none}
+/* 마스크 와이프 — clip-path 는 관찰 대상이 아니라 그 자식에 건다.
+   (관찰 대상 자신에 clip-path 를 걸면 IntersectionObserver 가 교차를 못 잡는다) */
+.rv-type > *{clip-path:inset(0 0 105% 0); transition:clip-path 1s var(--ease)}
+.rv-type.in > *{clip-path:inset(0 0 -14% 0)}
+.rv-img img{transform:scale(1.08); transition:transform 1.4s var(--ease)}
+.rv-img.in img{transform:scale(1)}
+[data-d="1"]{transition-delay:.09s} [data-d="2"]{transition-delay:.18s}
+[data-d="3"]{transition-delay:.27s} [data-d="4"]{transition-delay:.36s}
+@media (prefers-reduced-motion:reduce){
+  .rv,.rv-up,.rv-type,.rv-img img{transition:none!important;opacity:1!important;
+    transform:none!important;clip-path:none!important}
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+.hd{
+  position:fixed; inset:0 0 auto 0; z-index:40;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:24px; padding:18px var(--pad);
+  color:#fff; transition:background-color .35s ease, padding .35s ease,
+              box-shadow .35s ease, color .35s ease;
+}
+.hd.stuck{
+  background:var(--brand-sumi); padding-block:11px;
+  box-shadow:0 1px 0 rgba(255,255,255,.13);
+}
+.hd__brand{display:flex; align-items:center; gap:11px}
+.hd__brand img{width:34px;height:34px}
+.hd__name{display:flex; flex-direction:column; line-height:1}
+.hd__name b{font-size:19px; font-weight:800; letter-spacing:-.025em}
+.hd__name span{
+  font-family:var(--ens); font-size:var(--t-mic); letter-spacing:.14em;
+  opacity:.62; margin-top:5px; text-transform:uppercase;
+}
+.nav{display:flex; gap:26px; align-items:center}
+.nav a{
+  font-size:var(--t-cap); font-weight:600; letter-spacing:-.01em;
+  position:relative; padding-block:6px; opacity:.86;
+  transition:opacity .2s ease;
+}
+.nav a::after{
+  content:""; position:absolute; left:0; right:100%; bottom:0; height:2px;
+  background:var(--acc); transition:right .38s var(--ease);
+}
+.nav a:hover{opacity:1}
+.nav a:hover::after{right:0}
+.hd__cta{
+  font-size:var(--t-cap); font-weight:800; letter-spacing:-.01em;
+  padding:10px 20px; border-radius:999px;
+  background:#fff; color:var(--brand-deep);
+  transition:transform .25s var(--ease), box-shadow .25s ease;
+}
+.hd__cta:hover{transform:translateY(-2px); box-shadow:0 10px 24px rgba(0,0,0,.28)}
+@media (max-width:900px){ .nav{display:none} }
+@media (max-width:600px){
+  .hd{gap:10px; padding:12px var(--pad)}
+  .hd__brand img{width:30px; height:30px}
+  .hd__name b{font-size:16.5px}
+  .hd__name span{display:none}
+  .hd__cta{padding:9px 15px; white-space:nowrap}
+}
+
+/* =========================================================
+   1 · HERO  — 인디고가 화면 전체를 장악
+   ========================================================= */
+.hero{
+  position:relative; min-height:100svh; display:flex; align-items:center;
+  background:var(--brand-deep); color:#fff; overflow:hidden;
+  padding-block:clamp(96px,12vh,132px) clamp(52px,7vh,88px);
+}
+.hero__stripe{position:absolute; inset:0; background:var(--stripe); pointer-events:none}
+.hero__glow{
+  position:absolute; left:-14vw; top:-24vh; width:78vw; height:110vh;
+  background:radial-gradient(closest-side, rgba(110,124,192,.55), transparent 72%);
+  pointer-events:none;
+}
+/* 크레스트 부품 ①: 거대 고스트 「わ」 (이미지 0바이트) */
+.ghost{
+  position:absolute; left:-5vw; bottom:-27vh; z-index:0;
+  font-family:var(--jpm); font-size:clamp(300px,44vw,680px); line-height:.78;
+  color:rgba(255,255,255,.105); pointer-events:none; user-select:none;
+}
+.hero__inner{
+  position:relative; z-index:3; width:100%;
+  max-width:var(--wrap); margin-inline:auto; padding-inline:var(--pad);
+}
+.hero__col{max-width:min(790px, 56.5vw)}
+.hero__eyebrow{
+  display:flex; align-items:center; gap:14px; color:var(--acc);
+  margin-bottom:clamp(14px,2vw,24px);
+}
+.hero__eyebrow i{display:block; width:46px; height:2px; background:var(--acc); flex:none}
+.ebko{font-family:var(--sans); font-size:var(--t-cap); font-weight:600;
+  letter-spacing:-.01em; color:rgba(255,255,255,.74)}
+.ebko::before{content:"·"; margin-right:9px; opacity:.55}
+/* 라틴 디스플레이 트랙 — 아웃라인 키커 */
+.hero__latin{
+  font-size:clamp(21px,2.7vw,40px); font-weight:800; line-height:1;
+  letter-spacing:.04em; margin:0 0 clamp(14px,1.8vw,22px);
+  text-transform:uppercase; color:transparent;
+  -webkit-text-stroke:1.3px rgba(255,255,255,.6);
+}
+.hero h1{
+  font-size:var(--t-h1); font-weight:800; line-height:1.14;
+  letter-spacing:-.033em;
+}
+.hero h1 b{font-weight:800; color:var(--acc)}
+.hero__lead{
+  max-width:42ch; margin-top:clamp(15px,1.9vw,24px);
+  color:rgba(255,255,255,.86);
+}
+.hero__cta{display:flex; flex-wrap:wrap; gap:12px; margin-top:clamp(22px,2.8vw,34px)}
+.btn{
+  display:inline-flex; align-items:center; gap:10px;
+  min-height:54px; padding:0 30px; border-radius:999px;
+  font-size:16.5px; font-weight:800; letter-spacing:-.015em;
+  border:1.5px solid transparent; cursor:pointer;
+  transition:transform .28s var(--ease), background-color .3s ease,
+             color .25s ease, box-shadow .3s ease;
+}
+.btn svg{transition:transform .32s var(--ease)}
+.btn:hover svg{transform:translateX(5px)}
+.btn--solid{background:#fff; color:var(--brand-deep)}
+.btn--solid:hover{transform:translateY(-3px); box-shadow:0 16px 34px rgba(0,0,0,.3)}
+.btn--ghost{border-color:rgba(255,255,255,.5); color:#fff}
+.btn--ghost:hover{background:rgba(255,255,255,.12); transform:translateY(-3px)}
+.hero__note{
+  margin-top:17px; font-size:var(--t-cap); color:rgba(255,255,255,.66);
+  display:flex; align-items:center; gap:9px;
+}
+.hero__note i{width:6px;height:6px;background:var(--acc);flex:none}
+
+/* 사진 — 하드 대각 컷으로 우측 뷰포트 끝까지 블리드. radius 0 */
+.hero__fig{
+  position:absolute; top:0; right:0; bottom:0; width:44vw; z-index:2;
+  clip-path:polygon(30% 0, 100% 0, 100% 100%, 0 100%);
+  overflow:hidden;
+}
+.hero__fig img{width:100%; height:100%; object-fit:cover; object-position:54% 42%}
+.hero__fig::after{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(100deg, rgba(58,70,130,.96) 0 5%,
+             rgba(58,70,130,.34) 15%, rgba(58,70,130,.08) 26%, rgba(58,70,130,0) 38%);
+}
+/* 사진 위에 떠 있는 유리질 카드 */
+.float{
+  position:absolute; z-index:5; right:var(--pad); bottom:clamp(40px,7vh,92px);
+  background:rgba(21,25,45,.82); backdrop-filter:blur(14px) saturate(1.2);
+  border:1px solid rgba(255,255,255,.16);
+  padding:18px 22px; max-width:290px; color:#fff;
+  box-shadow:0 28px 56px rgba(0,0,0,.38);
+}
+.float .mic{color:var(--acc)}
+.float p{margin-top:9px; font-size:var(--t-cap); line-height:1.6; color:rgba(255,255,255,.92)}
+.float .jpm{font-size:19px; letter-spacing:.01em}
+
+@media (max-width:1080px){
+  .hero{display:block; padding-bottom:0; min-height:0}
+  .hero__col{max-width:none}
+  .hero__fig{
+    position:relative; width:100vw; height:min(56vh,400px); margin-top:38px;
+    clip-path:polygon(0 9%, 100% 0, 100% 100%, 0 100%);
+  }
+  .hero__fig::after{
+    background:linear-gradient(0deg, rgba(58,70,130,.12), rgba(58,70,130,.12));
+  }
+  .float{position:static; max-width:none; margin:0 var(--pad); transform:translateY(-40px)}
+  .ghost{left:-14vw; bottom:auto; top:34vh}
+}
+
+/* 크레스트 부품 ③: 잘려 나가는 거대 아웃라인 워드마크 */
+.wordrule{
+  background:var(--brand-deep); overflow:hidden; position:relative;
+  height:clamp(58px,8.4vw,116px);
+  border-top:1px solid rgba(255,255,255,.14);
+}
+.wordrule span{
+  position:absolute; left:var(--pad); top:50%; translate:0 -50%;
+  white-space:nowrap; font-size:clamp(72px,11.6vw,178px); font-weight:800;
+  line-height:.8; letter-spacing:-.03em; text-transform:uppercase;
+  color:transparent; -webkit-text-stroke:1.4px rgba(255,255,255,.34);
+  user-select:none; pointer-events:none;
+}
+.wordrule span i{font-style:normal; -webkit-text-stroke-color:rgba(245,213,71,.66)}
+
+/* =========================================================
+   2 · 사실 띠 — 짧고 단단한 잉크 밴드
+   ========================================================= */
+.facts{
+  position:relative; background:var(--brand-sumi); color:#fff;
+  padding-block:var(--sec-sm); overflow:hidden;
+}
+.facts::before{content:""; position:absolute; inset:0; background:var(--stripe); opacity:.55}
+.facts__grid{
+  position:relative; display:grid; gap:0;
+  grid-template-columns:1.5fr 1fr 1fr 1fr;
+}
+.fact{padding:clamp(18px,2.2vw,26px) clamp(18px,2.4vw,34px); position:relative}
+.fact + .fact::before{
+  content:""; position:absolute; left:0; top:8%; bottom:8%;
+  width:1px; background:var(--hair-d);
+}
+.fact .mic{color:var(--acc); display:block; margin-bottom:10px}
+.fact__v{font-size:clamp(17px,1.8vw,21px); font-weight:700; line-height:1.45; letter-spacing:-.02em}
+/* 크레스트 부품 ②: 로고 리본에서 온 유일한 정직한 숫자 */
+.fact--big .fact__v{
+  font-family:var(--ens); font-weight:400;
+  font-size:clamp(56px,7.4vw,104px); line-height:.88; letter-spacing:-.035em;
+}
+.fact--big small{
+  display:block; font-family:var(--sans); font-size:var(--t-cap); font-weight:600;
+  letter-spacing:-.01em; color:rgba(255,255,255,.72); margin-top:10px;
+}
+@media (max-width:860px){
+  .facts__grid{grid-template-columns:1fr 1fr}
+  .fact + .fact::before{display:none}
+  .fact{border-top:1px solid var(--hair-d)}
+  .fact--big{grid-column:1 / -1; border-top:0}
+}
+
+/* =========================================================
+   3 · 대비 — 교과서 ↔ 진짜
+   ========================================================= */
+.cmp{position:relative; padding-block:var(--sec-xl); overflow:hidden}
+.cmp__ghost{
+  position:absolute; left:-7vw; top:1vh; font-family:var(--jpm);
+  font-size:clamp(190px,24vw,400px); line-height:.8; z-index:0;
+  color:color-mix(in srgb, var(--brand) 9%, transparent);
+  pointer-events:none; user-select:none;
+}
+.cmp__head{
+  position:relative; z-index:2; display:grid;
+  grid-template-columns:auto minmax(220px,1fr); align-items:end; gap:clamp(20px,4vw,56px);
+  margin-bottom:clamp(40px,6vw,80px);
+}
+.cmp__head .mic{color:var(--brand-txt); display:block; margin-bottom:16px}
+.cmp__head p{color:var(--ink-soft); max-width:34ch; padding-bottom:.5em}
+.mark{color:var(--brand-txt); font-weight:800}
+/* 일본어 런에만 명조 — 한글에 명조를 걸면 폴백으로 두 서체가 한 줄에 섞인다 */
+.mark-jp{font-family:var(--jpm); font-weight:500; color:var(--brand-txt); letter-spacing:.02em}
+
+.bubs{position:relative; z-index:2; display:grid;
+  grid-template-columns:repeat(12,1fr); column-gap:clamp(12px,1.6vw,20px)}
+.bub{position:relative; padding:clamp(24px,3vw,38px)}
+.bub--text{
+  grid-column:1/7; grid-row:1;
+  background-color:var(--paper-2); background-image:var(--stripe-l);
+  border:1px solid var(--hair-l); color:var(--ink-soft);
+}
+.bub--real{
+  grid-column:6/13; grid-row:1; z-index:2;
+  background:var(--brand-deep); color:#fff; margin-top:clamp(44px,8vw,124px);
+  box-shadow:0 30px 64px rgba(58,70,130,.32);
+}
+.bub--real::before{content:""; position:absolute; inset:0; background:var(--stripe); opacity:.7}
+.bub > *{position:relative; z-index:1}
+.bub .mic{display:block; margin-bottom:16px}
+.bub--text .mic{color:var(--ink-soft)}
+.bub--real .mic{color:var(--acc)}
+.bub__jp{
+  font-family:var(--jpm); font-size:clamp(21px,2.5vw,34px); line-height:1.5;
+  letter-spacing:.005em; font-weight:500;
+}
+.bub--text .bub__jp{color:var(--ink); opacity:.62}
+.bub__ko{margin-top:14px; font-size:var(--t-cap); line-height:1.62}
+.bub--text .bub__ko{color:var(--ink-soft)}
+.bub--real .bub__ko{color:rgba(255,255,255,.82)}
+.bub__tail{
+  position:absolute; bottom:-15px; left:38px; width:30px; height:15px;
+  clip-path:polygon(0 0, 100% 0, 26% 100%);
+}
+.bub--text .bub__tail{background:var(--paper-2)}
+.bub--real .bub__tail{background:var(--brand-deep)}
+.bubs__cap{
+  grid-column:1/-1; grid-row:2; margin-top:clamp(34px,4.4vw,58px);
+  display:flex; align-items:center; gap:16px;
+  font-size:clamp(17px,1.9vw,23px); font-weight:700; letter-spacing:-.02em;
+}
+.bubs__cap i{flex:none; display:block; width:clamp(40px,7vw,110px); height:3px; background:var(--brand)}
+@media (max-width:820px){
+  .cmp__head{grid-template-columns:1fr; align-items:start}
+  .bubs{grid-template-columns:1fr}
+  .bub--text{grid-column:1; grid-row:1}
+  .bub--real{grid-column:1; grid-row:2; margin-top:10px}
+  .bubs__cap{grid-row:3}
+}
+
+/* 대비 아래 사진 스트립 — 100vw 풀블리드, 초광폭 */
+.strip{
+  width:100vw; margin-left:calc(50% - 50vw); position:relative;
+  background:var(--brand-sumi);
+}
+.strip img{width:100%; height:clamp(220px,38vw,470px); object-fit:cover; object-position:50% 46%}
+.strip figcaption{
+  position:absolute; left:var(--pad); bottom:clamp(18px,3vw,34px);
+  color:#fff; font-size:var(--t-cap); letter-spacing:-.01em;
+  background:rgba(21,25,45,.7); backdrop-filter:blur(8px);
+  padding:9px 16px; border:1px solid rgba(255,255,255,.18);
+}
+
+/* =========================================================
+   4 · 커뮤니티 — 채도 클라이맥스 밴드
+   ========================================================= */
+.comm{
+  position:relative; background:var(--brand); color:#fff;
+  min-height:min(92vh,860px); display:flex; align-items:center;
+  padding-block:var(--sec-xl); overflow:hidden;
+}
+.comm::before{content:""; position:absolute; inset:0; background:var(--stripe)}
+.comm__crest{
+  position:absolute; right:-6vw; top:50%; transform:translateY(-50%);
+  width:min(58vw,680px); opacity:.11; pointer-events:none;
+  filter:brightness(0) invert(1);
+}
+.comm__inner{position:relative; z-index:2; width:100%;
+  max-width:var(--wrap); margin-inline:auto; padding-inline:var(--pad)}
+.comm__latin{
+  font-family:var(--ens); font-weight:400;
+  font-size:clamp(40px,6.6vw,104px); line-height:.94; letter-spacing:-.035em;
+  color:rgba(255,255,255,.66); margin-bottom:clamp(10px,1.6vw,20px);
+}
+.comm h2{
+  font-size:var(--t-h2); font-weight:800; line-height:1.2;
+  letter-spacing:-.028em; max-width:min(960px,68vw);
+}
+.comm__lead{max-width:min(560px,46vw); margin-top:20px; color:rgba(255,255,255,.84)}
+.acts{
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:clamp(16px,2vw,26px); margin-top:clamp(40px,6vw,76px); align-items:start;
+}
+.act{
+  background:rgba(19,23,44,.34); border:1px solid rgba(255,255,255,.2);
+  padding:clamp(20px,2.4vw,30px); position:relative; overflow:hidden;
+  transition:transform .4s var(--ease), background-color .4s ease, border-color .4s ease;
+}
+.act:nth-child(2){margin-top:clamp(20px,3.4vw,52px)}
+.act:nth-child(3){margin-top:clamp(40px,6.6vw,104px)}
+.act:hover{transform:translateY(-8px); background:rgba(19,23,44,.55); border-color:var(--acc)}
+.act__jp{
+  font-family:var(--jpm); font-size:clamp(30px,3.6vw,48px); line-height:1.1;
+  letter-spacing:.02em; color:var(--acc);
+}
+.act__ko{margin-top:14px; font-size:clamp(18px,1.9vw,22px); font-weight:800; letter-spacing:-.022em}
+.act__d{margin-top:10px; font-size:var(--t-cap); line-height:1.65; color:rgba(255,255,255,.76)}
+.act__ph{
+  margin-top:20px; height:118px; display:flex; align-items:center; justify-content:center;
+  border:1px dashed rgba(255,255,255,.34);
+  background:repeating-linear-gradient(48deg, rgba(255,255,255,.06) 0 9px, transparent 9px 22px);
+  font-size:var(--t-mic); letter-spacing:.05em; color:rgba(255,255,255,.72);
+}
+@media (max-width:820px){
+  .acts{grid-template-columns:1fr}
+  .act:nth-child(2),.act:nth-child(3){margin-top:0}
+  .comm__crest{right:-24vw; opacity:.08}
+}
+
+/* =========================================================
+   5 · 교실 — 스케일 편차 그리드
+   ========================================================= */
+.room{padding-block:var(--sec)}
+.room__head{
+  display:grid; grid-template-columns:auto minmax(200px,1fr);
+  gap:clamp(18px,4vw,52px); align-items:end; margin-bottom:clamp(30px,4vw,52px);
+}
+.room__head h2{max-width:16ch}
+.room__head p{color:var(--ink-soft); max-width:32ch; padding-bottom:.4em}
+.grid5{display:grid; grid-template-columns:repeat(12,1fr);
+  column-gap:20px; row-gap:clamp(26px,4vw,64px); align-items:start}
+.g-a{grid-column:span 7}
+.g-b{grid-column:span 5; margin-top:clamp(28px,5vw,84px)}
+.g-c{grid-column:span 4}
+.g-d{grid-column:span 4; margin-top:clamp(20px,3vw,46px)}
+.g-e{grid-column:span 4}
+.grid5 figure{margin:0; position:relative; overflow:hidden}
+.grid5 img{width:100%; height:100%; object-fit:cover;
+  transition:transform .8s var(--ease)}
+.grid5 figure:hover img{transform:scale(1.045)}
+.g-a img{aspect-ratio:16/10}
+.g-b img{aspect-ratio:4/5}
+.g-c img,.g-e img{aspect-ratio:1/1}
+.g-d img{aspect-ratio:4/3}
+.cap{
+  margin-top:11px; font-size:var(--t-cap); color:var(--ink-soft);
+  display:flex; gap:9px; align-items:baseline;
+}
+.cap b{color:var(--brand-txt); font-weight:800; letter-spacing:-.01em}
+@media (max-width:820px){
+  .room__head{grid-template-columns:1fr; align-items:start}
+  .grid5{grid-template-columns:repeat(2,1fr); row-gap:30px}
+  .g-a{grid-column:1/-1} .g-b{grid-column:1/-1; margin-top:0}
+  .g-c,.g-d,.g-e{grid-column:span 1; margin-top:0}
+}
+
+/* =========================================================
+   6 · 마지막 CTA
+   ========================================================= */
+.end{
+  position:relative; background:var(--brand-sumi); color:#fff;
+  padding-block:var(--sec-xl); overflow:hidden; text-align:left;
+}
+.end::before{content:""; position:absolute; inset:0; background:var(--stripe); opacity:.7}
+.end__inner{position:relative; z-index:2; max-width:var(--wrap);
+  margin-inline:auto; padding-inline:var(--pad)}
+.end .disp{
+  text-transform:uppercase; color:transparent;
+  -webkit-text-stroke:1.4px rgba(255,255,255,.5); margin-bottom:18px;
+}
+.end h2{font-size:var(--t-h1); font-weight:800; line-height:1.16; letter-spacing:-.032em; max-width:15ch}
+.end__lead{max-width:40ch; margin-top:20px; color:rgba(255,255,255,.82)}
+.end__cta{display:flex; flex-wrap:wrap; gap:12px; margin-top:34px}
+
+.ft{background:var(--brand-sumi); color:rgba(255,255,255,.7); padding-block:0 var(--sec-sm)}
+.ft__inner{max-width:var(--wrap); margin-inline:auto; padding-inline:var(--pad);
+  border-top:1px solid var(--hair-d); padding-top:var(--sec-sm);
+  display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:28px; font-size:var(--t-cap)}
+.ft b{display:block; color:#fff; font-size:var(--t-h3); margin-bottom:10px; letter-spacing:-.02em}
+.ft .en{display:block; font-size:var(--t-mic); letter-spacing:.16em; text-transform:uppercase; opacity:.6; margin-top:6px}
+.ft .ph{color:var(--acc); font-weight:700}
+@media (max-width:820px){ .ft__inner{grid-template-columns:1fr} }
+</style>
+</head>
+<body><div style="position:fixed;left:0;right:0;top:0;z-index:9999;background:#2E3866;color:#fff;
+padding:9px 16px;font:600 14px/1.5 -apple-system,'Apple SD Gothic Neo',sans-serif;
+display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap">
+<b>④ 브랜드 색면</b><span style="opacity:.8;font-weight:400">학원 색으로 화면을 채움 · 강하고 또렷</span>
+<a href="../../interview/#designs" style="background:rgba(255,255,255,.2);color:#fff;text-decoration:none;
+padding:4px 12px;border-radius:99px;font-size:13px">← 고르러 돌아가기</a></div>
+<div style="height:44px"></div>
+
+<header class="hd" id="hd">
+  <a class="hd__brand" href="#top">
+    <img src="../../assets/img/crest-white-128.png" width="34" height="34" alt="와가마마스쿨 크레스트">
+    <span class="hd__name">
+      <b>와가마마스쿨</b>
+      <span class="en">Wagamama School</span>
+    </span>
+  </a>
+  <nav class="nav">
+    <a href="#cmp">수업</a>
+    <a href="#comm">커뮤니티</a>
+    <a href="#room">교실</a>
+    <a href="#end">문의</a>
+  </nav>
+  <a class="hd__cta" href="#end">체험수업 신청</a>
+</header>
+
+<!-- ============ 1 · HERO ============ -->
+<section class="hero" id="top">
+  <div class="hero__glow"></div>
+  <div class="hero__stripe"></div>
+  <div class="ghost jpm" aria-hidden="true">わ</div>
+
+  <div class="hero__inner">
+   <div class="hero__col">
+    <div class="hero__eyebrow rv" data-d="1"><i></i><span class="mic">Since 2014</span><span class="ebko">일본어 회화 전문</span></div>
+
+    <div class="rv-type">
+      <p class="hero__latin en">Wagamama School</p>
+    </div>
+
+    <h1 class="rv-up" data-d="1">교과서의 일본어가 아니라,<br>일본인 친구들이 쓰는<br><b>일본어를 배웁니다</b></h1>
+
+    <p class="hero__lead lead rv-up" data-d="2">문법이 틀려서가 아닙니다. 같은 상황에서 일본인이 고르는 말이 따로 있고, 교과서는 거기까지 싣지 못합니다. 와가마마스쿨은 2014년부터 그 차이를 가르쳐 왔습니다. 한 테이블에 둘러앉아, 시험이 아니라 대화를 연습합니다.</p>
+
+    <div class="hero__cta rv-up" data-d="3">
+      <a class="btn btn--solid" href="#end">체험수업 신청하기
+        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" aria-hidden="true">
+          <path d="M2 8.5h12M9 3.5l5 5-5 5" stroke="currentColor" stroke-width="2"
+                stroke-linecap="square"/></svg></a>
+      <a class="btn btn--ghost" href="#end">카카오톡으로 문의하기</a>
+    </div>
+
+    <p class="hero__note rv" data-d="4"><i></i>수업을 한 번 보고 결정하셔도 됩니다. 등록을 먼저 권하지 않습니다.</p>
+   </div>
+  </div>
+
+  <figure class="hero__fig rv-img" style="margin:0">
+    <img src="../../assets/img/crop-atmos-880.jpg" width="880" height="1100"
+         alt="테이블에 둘러앉아 일본어로 대화하는 수업 장면">
+  </figure>
+
+  <aside class="float rv-up" data-d="4">
+    <span class="mic">Real Japanese</span>
+    <p class="jpm">「キムです。よろしく〜」</p>
+    <p>김이야. 잘 부탁해~</p>
+  </aside>
+</section>
+
+<div class="wordrule" aria-hidden="true">
+  <span class="en">Wagamama School <i>2014</i> Wagamama School</span>
+</div>
+
+<!-- ============ 2 · 사실 띠 ============ -->
+<section class="facts">
+  <div class="wrap facts__grid">
+    <div class="fact fact--big rv-up">
+      <span class="mic">Since</span>
+      <div class="fact__v en">2014</div>
+      <small>2014년부터</small>
+    </div>
+    <div class="fact rv-up" data-d="1">
+      <span class="mic">Teacher</span>
+      <div class="fact__v">먼저 배운<br>한국인 선생님</div>
+    </div>
+    <div class="fact rv-up" data-d="2">
+      <span class="mic">Class</span>
+      <div class="fact__v">테이블 하나에<br>둘러앉는 소그룹</div>
+    </div>
+    <div class="fact rv-up" data-d="3">
+      <span class="mic">First step</span>
+      <div class="fact__v">첫 수업은<br>무료 체험</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3 · 대비 ============ -->
+<section class="cmp" id="cmp">
+  <div class="cmp__ghost jpm" aria-hidden="true">わ</div>
+  <div class="wrap">
+    <div class="cmp__head">
+      <div class="rv-up">
+        <span class="mic">The difference</span>
+        <h2 class="h2">틀린 문장이 아니라,<br>쓰이지 않는 <span class="mark">문장</span>입니다</h2>
+      </div>
+      <p class="rv-up" data-d="2">두 문장 모두 문법은 맞습니다. 그런데 실제로 그 자리에서 쓰이는 건 한쪽뿐입니다.</p>
+    </div>
+
+    <div class="bubs">
+      <div class="bub bub--text rv-up">
+        <span class="mic">Textbook</span>
+        <p class="bub__jp">「はじめまして。<br>私はキムです。」</p>
+        <p class="bub__ko">처음 뵙겠습니다. 저는 김입니다.</p>
+        <span class="bub__tail"></span>
+      </div>
+      <div class="bub bub--real rv-up" data-d="2">
+        <span class="mic">Real</span>
+        <p class="bub__jp">「キムです。<br>よろしく〜」</p>
+        <p class="bub__ko">김이야. 잘 부탁해~</p>
+        <span class="bub__tail"></span>
+      </div>
+      <p class="bubs__cap rv-up" data-d="3"><i></i>같은 자리에서, 일본인은 이렇게 말합니다.</p>
+    </div>
+  </div>
+
+  <figure class="strip rv-img" style="margin:clamp(56px,8vw,110px) 0 0">
+    <img src="../../assets/img/crop-wide-1920.jpg" width="1920" height="823"
+         alt="좁은 교실에 열 명 남짓이 테이블을 둘러앉은 수업 전경">
+    <figcaption>한 테이블에 둘러앉는 것이 이 학원의 수업 형태입니다.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ 4 · 커뮤니티 (클라이맥스 밴드) ============ -->
+<section class="comm" id="comm">
+  <img class="comm__crest" src="../../assets/img/crest-512.png" width="512" height="512" alt="" aria-hidden="true">
+  <div class="comm__inner">
+    <div class="rv-type"><p class="comm__latin en">Outside<br>the classroom</p></div>
+    <h2 class="rv-up" data-d="1">소풍을 가고, 수학여행을 떠나고,<br>운동회를 엽니다</h2>
+    <p class="comm__lead lead rv-up" data-d="2">교실에서 연습한 말을 실제로 써 보는 자리가 따로 있습니다. 일본인 친구들과 함께 하루를 보내면, 수업에서 배운 표현이 그날 안에 자기 말이 됩니다.</p>
+
+    <div class="acts">
+      <article class="act rv-up" data-d="1">
+        <p class="act__jp jpm">遠足</p>
+        <p class="act__ko">봄 소풍</p>
+        <p class="act__d">날이 풀리면 밖으로 나갑니다. 자기소개가 아니라 잡담을 하게 되는 하루입니다.</p>
+        <div class="act__ph">사진 준비 중</div>
+      </article>
+      <article class="act rv-up" data-d="2">
+        <p class="act__jp jpm">修学旅行</p>
+        <p class="act__ko">수학여행</p>
+        <p class="act__d">며칠을 함께 지냅니다. 길게 붙어 있어야 나오는 말들이 있습니다.</p>
+        <div class="act__ph">사진 준비 중</div>
+      </article>
+      <article class="act rv-up" data-d="3">
+        <p class="act__jp jpm">運動会</p>
+        <p class="act__ko">가을 운동회</p>
+        <p class="act__d">뛰면서 하는 말은 문장이 짧아집니다. 그 짧은 말이 제일 실전에 가깝습니다.</p>
+        <div class="act__ph">사진 준비 중</div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5 · 교실 ============ -->
+<section class="room" id="room">
+  <div class="wrap">
+    <div class="room__head">
+      <h2 class="h2 rv-up">교실은 크지 않습니다.<br>대신 <span class="mark-jp">全員</span>이 말합니다</h2>
+      <p class="rv-up" data-d="2">벽에 가나표와 일본 지도가 붙어 있고, 책장에는 일본 소설과 만화가 꽂혀 있습니다.</p>
+    </div>
+
+    <div class="grid5">
+      <figure class="g-a rv-img">
+        <img src="../../assets/img/crop-table-1000.jpg" width="1000" height="750"
+             alt="테이블을 둘러앉아 이야기하는 수강생들">
+        <figcaption class="cap"><b>01</b> 테이블 하나. 앉는 순서로 발언 순서가 정해지지 않습니다.</figcaption>
+      </figure>
+      <figure class="g-b rv-img" data-d="1">
+        <img src="../../assets/img/crop-room2-880.jpg" width="880" height="1100"
+             alt="벽에 가나표와 일본 지도가 붙은 교실 전경">
+        <figcaption class="cap"><b>02</b> 가나표와 일본 지도.</figcaption>
+      </figure>
+      <figure class="g-c rv-img">
+        <img src="../../assets/img/teacher_portrait-sq600.jpg" width="600" height="600"
+             alt="와가마마스쿨 선생님">
+        <figcaption class="cap"><b>03</b> 먼저 배운 한국인 선생님.</figcaption>
+      </figure>
+      <figure class="g-d rv-img" data-d="1">
+        <img src="../../assets/img/crop-books-980.jpg" width="980" height="400"
+             alt="일본 소설과 만화가 꽂힌 책장">
+        <figcaption class="cap"><b>04</b> 읽고 싶은 책이 교재가 됩니다.</figcaption>
+      </figure>
+      <figure class="g-e rv-img" data-d="2">
+        <img src="../../assets/img/crop-notes-760.jpg" width="760" height="600"
+             alt="손글씨로 적은 일본어 노트">
+        <figcaption class="cap"><b>05</b> 받아쓴 말은 대부분 교과서에 없습니다.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 · 마지막 CTA ============ -->
+<section class="end" id="end">
+  <div class="end__inner">
+    <div class="rv-type"><p class="disp">First class<br>is free</p></div>
+    <h2 class="rv-up" data-d="1">수업을 한 번 보고<br>결정하셔도 됩니다</h2>
+    <p class="end__lead lead rv-up" data-d="2">등록을 먼저 권하지 않습니다. 체험수업에 한 번 앉아 보시고, 이 테이블이 맞는지 직접 확인하세요.</p>
+    <div class="end__cta rv-up" data-d="3">
+      <a class="btn btn--solid" href="#end">체험수업 신청하기
+        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" aria-hidden="true">
+          <path d="M2 8.5h12M9 3.5l5 5-5 5" stroke="currentColor" stroke-width="2"
+                stroke-linecap="square"/></svg></a>
+      <a class="btn btn--ghost" href="#end">카카오톡으로 문의하기</a>
+    </div>
+  </div>
+</section>
+
+<footer class="ft">
+  <div class="ft__inner">
+    <div>
+      <b>와가마마스쿨</b>
+      <span class="en">Wagamama School · since 2014</span>
+    </div>
+    <div>
+      <b>문의</b>
+      <span class="ph">{{KAKAO_CHANNEL}}</span><br>
+      <span class="ph">{{PHONE}}</span>
+    </div>
+    <div>
+      <b>위치</b>
+      {{ADDRESS}}<br>
+      {{HOURS}}
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var hd = document.getElementById('hd');
+  var onScroll = function(){
+    if (window.scrollY > 60) hd.classList.add('stuck'); else hd.classList.remove('stuck');
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, {passive:true});
+
+  var els = document.querySelectorAll('.rv, .rv-up, .rv-type, .rv-img');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(e){ e.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if (en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+    });
+  }, {threshold:0.12, rootMargin:'0px 0px -8% 0px'});
+  els.forEach(function(e){ io.observe(e); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>와가마마스쿨 — 교과서의 일본어가 아니라, 일본인 친구들이 쓰는 일본어를 배웁니다</title>
+<style>
+/* ============================================================
+   WAGAMAMA SCHOOL — direction: WARM CRAFT
+   종이 · 잉크 · 손. 웹폰트 0바이트. 외부 요청 0건.
+   ============================================================ */
+
+/* ---------- 0. reset ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0}
+img{display:block;max-width:100%;border-radius:0}
+figure{margin:0}
+h1,h2,h3,p,ul,li,blockquote,figure{margin:0;padding:0}
+ul{list-style:none}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0}
+
+/* ---------- 1. tokens ---------- */
+:root{
+  /* 페이지 폭: max-width 없이 padding 만으로 1240 을 만든다 → 풀블리드가 공짜 */
+  --wrap:1240px;
+  --edge:max(clamp(22px,5.4vw,56px), calc((100vw - var(--wrap)) / 2));
+
+  /* 종이와 잉크 — 순백·순검 금지 */
+  --paper:#F3EDE1;          /* 미색 종이 */
+  --paper-2:#EBE2D0;        /* 한 겹 눌린 면 */
+  --paper-3:#E2D8C3;        /* 두 겹 */
+  --ink:#1D1E2E;            /* 남색으로 물들인 검정 */
+  --ink-soft:#4A4740;
+  --brand:#5464AE;          /* 정품 로고 실측 — 불변 */
+  --brand-deep:#3A4682;     /* 종이 위 본문 가능 7.6:1 */
+  --band:#2E3866;           /* 클라이맥스 색면 (흰 글자 11.2:1) */
+  --seal:#A8442E;           /* 낙관(落款) 전용. 페이지 전체 면적 0.05% 미만 */
+  --hair:rgba(29,30,46,.20);
+  --hair-2:rgba(29,30,46,.42);
+  --onband:#FBF7EF;
+  --onband-soft:rgba(251,247,239,.72);
+
+  /* 글자 사다리 — 허용 크기 6종 + 라틴 세리프 트랙 1종 */
+  --t-display:clamp(33px,7.4vw,108px);  /* 한글 디스플레이 */
+  --t-latin:clamp(46px,8.6vw,128px);    /* 라틴 세리프 디스플레이 */
+  --t-h2:clamp(27px,4.1vw,56px);
+  --t-h3:clamp(19px,2.1vw,29px);
+  --t-body:17px;
+  --t-small:14.5px;
+  --t-micro:12.5px;
+
+  --f-sans:"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic","맑은 고딕",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,"Times New Roman",serif;
+  --f-mincho:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"MS Mincho","Songti SC",serif;
+  --f-jp:"Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",var(--f-sans);
+
+  /* 세로 리듬 3단 — 균일 패딩 금지 */
+  --pad-tight:clamp(30px,4.4vw,58px);
+  --pad-base:clamp(64px,8.4vw,116px);
+  --pad-breath:clamp(96px,14vw,192px);
+
+  --ease:cubic-bezier(.16,1,.3,1);
+  --sh-print:0 16px 30px rgba(46,56,102,.16), 0 2px 4px rgba(29,30,46,.08);
+  --sh-lift:0 26px 54px rgba(46,56,102,.20), 0 2px 6px rgba(29,30,46,.10);
+
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.86' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23g)' opacity='0.62'/%3E%3C/svg%3E");
+  --grain-op:.052;
+  --grain-blend:multiply;
+
+  /* 크레스트에서 떼어낸 48° 대각 스트라이프 */
+  --stripe:repeating-linear-gradient(48deg, rgba(251,247,239,.075) 0 9px, transparent 9px 27px);
+}
+
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#15130F;
+    --paper-2:#1D1A15;
+    --paper-3:#26221B;
+    --ink:#EFE8DA;
+    --ink-soft:#B8B0A2;
+    --brand:#A6B2E8;
+    --brand-deep:#C3CAF2;
+    --band:#2A3358;          /* 다크에서는 밴드를 배경보다 「밝게」 뒤집는다 */
+    --seal:#D2745B;
+    --hair:rgba(239,232,218,.18);
+    --hair-2:rgba(239,232,218,.34);
+    --grain-op:.038;
+    --grain-blend:screen;
+    --sh-print:0 16px 30px rgba(0,0,0,.5);
+    --sh-lift:0 26px 54px rgba(0,0,0,.6);
+  }
+}
+
+/* ---------- 2. base ---------- */
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--f-sans);
+  font-size:var(--t-body);
+  line-height:1.78;
+  letter-spacing:-.004em;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+/* 종이결 — 화면 전체에 고정된 한 장 */
+body::after{
+  content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;
+  background-image:var(--grain);background-size:240px 240px;
+  opacity:var(--grain-op);mix-blend-mode:var(--grain-blend);
+}
+.wrap{padding-left:var(--edge);padding-right:var(--edge)}
+.en{font-family:var(--f-serif);font-weight:400;letter-spacing:-.012em}
+.jp{font-family:var(--f-jp)}
+.mincho{font-family:var(--f-mincho);font-weight:400}
+.prose{max-width:37em}
+
+.kicker{
+  font-family:var(--f-serif);font-size:var(--t-micro);
+  text-transform:uppercase;letter-spacing:.26em;color:var(--ink-soft);
+  display:flex;align-items:center;gap:12px;
+}
+.kicker::after{content:"";flex:0 0 46px;height:1px;background:var(--hair-2)}
+
+h1,h2,h3{font-weight:600;word-break:keep-all}
+.display{
+  font-size:var(--t-display);line-height:1.15;letter-spacing:-.032em;
+  font-weight:600;
+}
+h2.h{font-size:var(--t-h2);line-height:1.2;letter-spacing:-.026em;font-weight:600}
+h3{font-size:var(--t-h3);line-height:1.34;letter-spacing:-.018em;font-weight:600}
+.lead{font-size:clamp(16.5px,1.42vw,19.5px);line-height:1.85;color:var(--ink-soft)}
+.small{font-size:var(--t-small);line-height:1.7;color:var(--ink-soft)}
+.micro{font-size:var(--t-micro);line-height:1.6;letter-spacing:.02em;color:var(--ink-soft)}
+
+/* 활판 인쇄의 미세한 눌림 — 라이트모드에서만 */
+@media (prefers-color-scheme:light){
+  .display,h2.h{text-shadow:0 1px 0 rgba(255,255,255,.6)}
+}
+
+/* 손으로 그은 밑줄 */
+.hand{position:relative;white-space:nowrap}
+.hand>svg{
+  position:absolute;left:-2%;bottom:-.34em;width:104%;height:.42em;
+  overflow:visible;color:var(--brand);opacity:.85;
+}
+.hand>svg path{
+  fill:none;stroke:currentColor;stroke-width:5.5;stroke-linecap:round;
+  stroke-dasharray:420;stroke-dashoffset:420;
+  transition:stroke-dashoffset 1.1s var(--ease) .25s;
+}
+.in .hand>svg path,.hand.in>svg path{stroke-dashoffset:0}
+
+/* 낙관(seal) — 붉은색은 오직 여기에만 */
+.seal{
+  width:54px;height:54px;flex:0 0 54px;display:grid;place-items:center;
+  border:1.8px solid var(--seal);color:var(--seal);
+  font-family:var(--f-mincho);font-size:26px;line-height:1;
+  transform:rotate(-4deg);opacity:.9;
+}
+
+/* 버튼 — 활판 인쇄판처럼: 각지게, 크게, 굵지 않게 */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  min-height:54px;padding:0 30px;border-radius:2px;
+  font-size:17px;font-weight:600;letter-spacing:-.01em;cursor:pointer;
+  transition:background-color .3s ease,color .2s ease,transform .3s var(--ease),box-shadow .3s ease;
+}
+.btn--solid{background:var(--brand-deep);color:#FBF7EF;box-shadow:0 3px 0 rgba(29,30,46,.22)}
+.btn--solid:hover{background:var(--ink);transform:translateY(-2px);box-shadow:0 5px 0 rgba(29,30,46,.22)}
+.btn--ghost{border:1.4px solid var(--hair-2);color:var(--ink)}
+.btn--ghost:hover{border-color:var(--ink);background:var(--paper-2)}
+@media (prefers-color-scheme:dark){
+  /* 다크에서는 브랜드색이 밝아지므로 글자를 어둡게 뒤집는다 (9.1:1) */
+  .btn--solid{background:var(--brand);color:#14120E;box-shadow:0 3px 0 rgba(0,0,0,.5)}
+  .btn--solid:hover{background:var(--brand-deep);color:#14120E;box-shadow:0 5px 0 rgba(0,0,0,.5)}
+}
+.btn--onband{background:var(--onband);color:var(--band);box-shadow:0 3px 0 rgba(0,0,0,.22)}
+.btn--onband:hover{transform:translateY(-2px);box-shadow:0 5px 0 rgba(0,0,0,.22)}
+.btn--onband-ghost{border:1.4px solid rgba(251,247,239,.5);color:var(--onband)}
+.btn--onband-ghost:hover{border-color:var(--onband);background:rgba(251,247,239,.1)}
+
+/* 사진: 큰 것은 무조건 radius 0 / 필터 0 */
+.fig img{width:100%;height:100%;object-fit:cover;border-radius:0}
+
+/* 인화지 — 작은 보조 사진에만 허용되는 테두리·기울기 */
+.print{
+  background:var(--paper);padding:11px 11px 40px;position:relative;
+  box-shadow:var(--sh-print);border:1px solid var(--hair);
+}
+.print img{width:100%;height:auto;display:block}
+.print figcaption{
+  position:absolute;left:14px;right:14px;bottom:12px;
+  font-size:12.5px;letter-spacing:.01em;color:var(--ink-soft);
+  font-family:var(--f-serif);
+}
+/* 마스킹 테이프 */
+.tape{
+  position:absolute;width:88px;height:26px;background:rgba(84,100,174,.16);
+  border-left:1px solid rgba(84,100,174,.2);border-right:1px solid rgba(84,100,174,.2);
+  top:-13px;left:50%;margin-left:-44px;transform:rotate(-2.4deg);
+  backdrop-filter:blur(1px);
+}
+.tape::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.22) 0 3px,transparent 3px 7px)}
+
+/* ---------- 3. 헤더 ---------- */
+.hdr{
+  position:relative;z-index:20;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  padding-top:20px;padding-bottom:18px;border-bottom:1px solid var(--hair);
+}
+.brandmark{display:flex;align-items:center;gap:13px}
+.brandmark img{width:38px;height:38px}
+.brandmark b{font-family:var(--f-serif);font-weight:400;font-size:20px;letter-spacing:-.005em;line-height:1}
+.brandmark span{display:block;font-size:12.5px;letter-spacing:.2em;color:var(--ink-soft);font-family:var(--f-serif);margin-top:3px}
+.nav{display:flex;align-items:center;gap:clamp(14px,2.4vw,34px);font-size:var(--t-small)}
+.nav a{padding:6px 2px;border-bottom:1px solid transparent;transition:border-color .25s ease,color .2s ease}
+.nav a:hover{border-color:var(--ink)}
+.nav .navcta{border:1.2px solid var(--hair-2);padding:9px 16px;border-radius:2px}
+.nav .navcta:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+@media(max-width:720px){.nav a:not(.navcta){display:none}}
+
+/* ---------- 4. 히어로 ---------- */
+.hero{position:relative;padding-right:0;padding-bottom:clamp(64px,9vw,120px)}
+.hero__grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,clamp(250px,31vw,430px));
+  column-gap:clamp(26px,4vw,62px);row-gap:clamp(24px,3.2vw,42px);
+  align-items:start;
+  padding-top:clamp(40px,6.4vw,88px);
+}
+.hero__eyebrow{
+  grid-column:1/-1;
+  display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;
+}
+.hero__eyebrow .mincho{font-size:clamp(15px,1.5vw,19px);letter-spacing:.16em;color:var(--brand-deep)}
+.hero__eyebrow .since{font-family:var(--f-serif);font-size:12.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--ink-soft)}
+.hero h1{grid-column:1/-1;max-width:1260px}
+.hero h1 em{font-style:normal;font-family:var(--f-mincho);font-weight:400;color:var(--brand-deep)}
+.hero__body{grid-column:1;grid-row:3;padding-top:clamp(6px,1.4vw,18px)}
+.hero__lead{max-width:33em;margin-bottom:clamp(24px,3vw,36px)}
+.hero__cta{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:26px}
+.hero__note{
+  display:flex;gap:14px;align-items:flex-start;max-width:30em;
+  padding-top:18px;border-top:1px solid var(--hair);
+}
+.hero__note p{font-size:var(--t-small);color:var(--ink-soft)}
+
+.hero__fig{
+  grid-column:2;grid-row:3;position:relative;align-self:stretch;
+  min-height:clamp(320px,36vw,540px);
+  margin-bottom:calc(-1 * clamp(16px,3.4vw,54px));
+}
+.hero__fig .shot{position:relative;height:100%;min-height:inherit;overflow:hidden}
+.hero__fig img{width:100%;height:100%;object-fit:cover;object-position:56% 40%}
+/* 사진 위에 얹히는 잉크 카드 (박스 밖으로 꺼낸 오버랩) */
+.floatcard{
+  position:absolute;left:clamp(-44px,-3vw,-18px);bottom:clamp(20px,3vw,44px);z-index:3;
+  max-width:min(310px,78vw);padding:19px 21px;
+  background:var(--ink);color:var(--paper);box-shadow:var(--sh-lift);
+}
+@media (prefers-color-scheme:dark){.floatcard{background:var(--band);color:var(--onband)}}
+.floatcard .l{font-family:var(--f-serif);font-size:12.5px;letter-spacing:.24em;text-transform:uppercase;opacity:.62;display:block;margin-bottom:8px}
+.floatcard p{font-size:14.5px;line-height:1.7}
+@media(max-width:900px){
+  .hero{padding-right:var(--edge)}
+  .hero__grid{grid-template-columns:1fr}
+  .hero__body,.hero__fig{grid-column:1;grid-row:auto}
+  .hero__fig{min-height:0;margin-bottom:0}
+  .hero__fig .shot{aspect-ratio:4/3;min-height:0}
+  .floatcard{left:auto;right:12px;bottom:12px}
+}
+@media(max-width:600px){
+  .display br,h2.h br{display:none}
+}
+
+/* ---------- 5. 사실 띠 (히어로를 덮으며 올라옴) ---------- */
+.facts{
+  position:relative;z-index:6;
+  margin-top:calc(-1 * clamp(36px,6vw,86px));
+  background:var(--paper-2);
+  border-top:1px solid var(--hair-2);border-bottom:1px solid var(--hair);
+  padding-top:var(--pad-tight);padding-bottom:var(--pad-tight);
+}
+.facts__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.fact{padding:6px clamp(14px,2vw,30px);border-left:1px solid var(--hair)}
+.fact:first-child{border-left:0;padding-left:0}
+.fact .l{font-family:var(--f-serif);font-size:12.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:9px}
+.fact .v{font-size:17px;line-height:1.5;font-weight:600;letter-spacing:-.015em}
+.fact .num{font-family:var(--f-serif);font-weight:400;font-size:clamp(40px,4.6vw,66px);line-height:.9;letter-spacing:-.03em;color:var(--brand-deep);display:block}
+.fact .num+small{font-size:14.5px;color:var(--ink-soft);font-weight:400}
+@media(max-width:820px){
+  .facts__grid{grid-template-columns:1fr 1fr;row-gap:26px}
+  .fact:nth-child(3){border-left:0;padding-left:0}
+}
+@media(max-width:460px){
+  .facts__grid{grid-template-columns:1fr;row-gap:22px}
+  .fact{border-left:0;padding-left:0;border-top:1px solid var(--hair);padding-top:16px}
+  .fact:first-child{border-top:0;padding-top:0}
+}
+
+/* ---------- 6. 대비 섹션 ---------- */
+.contrast{
+  position:relative;overflow:hidden;
+  padding-top:var(--pad-breath);padding-bottom:var(--pad-breath);
+}
+/* 원고지 격자 */
+.contrast::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--hair) 1px,transparent 1px),linear-gradient(90deg,var(--hair) 1px,transparent 1px);
+  background-size:36px 36px;opacity:.5;
+  -webkit-mask-image:radial-gradient(ellipse 62% 58% at 46% 44%,#000 0%,rgba(0,0,0,.35) 55%,transparent 78%);
+  mask-image:radial-gradient(ellipse 62% 58% at 46% 44%,#000 0%,rgba(0,0,0,.35) 55%,transparent 78%);
+}
+/* 거대 고스트 「わ」 */
+.ghost{
+  position:absolute;right:-4%;bottom:-16%;z-index:0;pointer-events:none;user-select:none;
+  font-family:var(--f-mincho);font-size:clamp(260px,40vw,600px);line-height:.78;
+  color:var(--brand);opacity:.075;
+}
+.contrast .inner{position:relative;z-index:2}
+.contrast__head{margin-bottom:clamp(40px,5.4vw,72px)}
+.contrast__head h2{max-width:15em}
+.contrast__head .kicker{margin-bottom:18px}
+.pair{
+  display:grid;grid-template-columns:1fr 1fr;gap:clamp(22px,3.4vw,52px);
+  align-items:start;max-width:1010px;
+}
+.card{position:relative;padding:clamp(24px,2.8vw,38px);}
+.card--text{
+  background:var(--paper);border:1px solid var(--hair-2);
+  transform:rotate(-.5deg);
+}
+.card--real{
+  background:var(--ink);color:var(--paper);transform:rotate(.7deg);
+  box-shadow:var(--sh-lift);
+}
+@media (prefers-color-scheme:dark){.card--real{background:var(--band);color:var(--onband)}}
+.card .tag{
+  font-family:var(--f-serif);font-size:12.5px;letter-spacing:.24em;text-transform:uppercase;
+  display:block;margin-bottom:16px;color:var(--ink-soft);
+}
+.card--real .tag{color:rgba(251,247,239,.66)}
+.card .say{
+  font-family:var(--f-mincho);font-size:clamp(20px,2.5vw,33px);line-height:1.55;
+  letter-spacing:.01em;margin-bottom:14px;
+}
+.card--real .say{color:#FBF7EF}
+.card .ko{font-size:14.5px;color:var(--ink-soft);line-height:1.6}
+.card--real .ko{color:rgba(251,247,239,.74)}
+.card--real::after{ /* 대각 스트라이프 — 크레스트 부품 */
+  content:"";position:absolute;inset:0;background:var(--stripe);pointer-events:none;
+}
+.pair__cap{
+  grid-column:1/-1;display:flex;align-items:center;gap:18px;
+  margin-top:clamp(28px,3.4vw,44px);padding-top:22px;border-top:1px solid var(--hair);
+}
+.pair__cap p{font-size:clamp(16.5px,1.42vw,19.5px);letter-spacing:-.015em}
+@media(max-width:760px){
+  .pair{grid-template-columns:1fr}
+  .card--text,.card--real{transform:none}
+}
+/* 대비 섹션의 보조 인화지 2장 */
+.notesrow{
+  display:flex;gap:clamp(16px,2.4vw,34px);align-items:flex-end;
+  margin-top:clamp(46px,6vw,86px);flex-wrap:wrap;
+}
+.notesrow .print{width:clamp(190px,22vw,268px)}
+.notesrow .print:nth-child(1){transform:rotate(-1.6deg)}
+.notesrow .print:nth-child(2){transform:rotate(1.3deg);margin-bottom:clamp(18px,3vw,44px)}
+.notesrow .side{max-width:26em;padding-bottom:8px}
+
+/* ---------- 7. 풀블리드 가로 띠 ---------- */
+.strip{position:relative}
+.strip img{width:100vw;height:auto;aspect-ratio:1920/823;object-fit:cover;object-position:50% 46%}
+.strip figcaption{
+  padding:14px var(--edge) 0;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  font-family:var(--f-serif);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);
+}
+
+/* ---------- 8. 커뮤니티 — 클라이맥스 색면 ---------- */
+.community{
+  position:relative;background:var(--band);color:var(--onband);
+  padding-top:var(--pad-breath);padding-bottom:var(--pad-base);
+  margin-top:clamp(60px,8vw,110px);
+  min-height:min(86vh,780px);overflow:hidden;
+}
+.community::before{content:"";position:absolute;inset:0;background:var(--stripe);pointer-events:none}
+.deckle{
+  position:absolute;top:-1px;left:0;width:100%;height:26px;display:block;
+  color:var(--paper);
+}
+.community .inner{position:relative;z-index:2}
+.community h2{color:var(--onband);max-width:16em;margin-bottom:clamp(20px,2.4vw,30px)}
+.community .lead{color:var(--onband-soft);max-width:34em}
+.acts{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  column-gap:22px;row-gap:clamp(40px,6vw,96px);
+  margin-top:clamp(52px,7vw,104px);
+}
+.act{border-top:1px solid rgba(251,247,239,.32);padding-top:20px}
+.act .jpname{font-family:var(--f-mincho);font-size:clamp(28px,3.4vw,46px);line-height:1.1;letter-spacing:.02em;display:block;margin-bottom:10px}
+.act .koname{font-size:14.5px;letter-spacing:.02em;color:var(--onband-soft);display:block;margin-bottom:20px}
+.act .slot{
+  aspect-ratio:4/3;border:1px dashed rgba(251,247,239,.34);
+  display:grid;place-items:center;text-align:center;
+  font-size:12.5px;letter-spacing:.16em;color:rgba(251,247,239,.6);
+  background:var(--stripe);
+}
+@media(max-width:760px){.acts{grid-template-columns:1fr;row-gap:36px}}
+.wordmark{
+  margin-top:clamp(56px,8vw,120px);
+  font-family:var(--f-serif);font-weight:400;
+  font-size:var(--t-latin);line-height:.92;letter-spacing:-.035em;
+  color:rgba(251,247,239,.94);
+}
+.wordmark small{
+  display:block;font-family:var(--f-sans);font-size:12.5px;letter-spacing:.26em;
+  text-transform:uppercase;color:rgba(251,247,239,.6);margin-top:18px;font-weight:400;
+}
+
+/* ---------- 9. 닫는 CTA ---------- */
+.closing{
+  padding-top:var(--pad-base);padding-bottom:var(--pad-tight);
+  display:grid;grid-template-columns:auto 1fr;align-items:end;
+  column-gap:clamp(24px,4vw,56px);row-gap:24px;
+}
+.closing h2{max-width:14em}
+.closing .side{display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+.closing .btns{display:flex;gap:12px;flex-wrap:wrap}
+@media(max-width:820px){.closing{grid-template-columns:1fr}}
+
+.foot{
+  margin-top:clamp(40px,6vw,80px);
+  border-top:1px solid var(--hair);
+  padding-top:26px;padding-bottom:52px;
+  display:flex;justify-content:space-between;gap:26px;flex-wrap:wrap;align-items:flex-start;
+}
+.foot dl{margin:0;display:grid;grid-template-columns:auto 1fr;column-gap:16px;row-gap:7px;font-size:var(--t-small)}
+.foot dt{font-family:var(--f-serif);font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);padding-top:3px}
+.foot dd{margin:0;color:var(--ink-soft)}
+.foot .ph{color:var(--ink);border-bottom:1px dotted var(--hair-2)}
+
+/* ---------- 10. 모션 — 역할별 3종 (JS 있을 때만 숨긴다: 실패해도 내용은 보인다) ---------- */
+.js .rv{opacity:0;transition:opacity .55s ease-in-out}
+.js .rv.in{opacity:1}
+.js .rv-type{clip-path:inset(0 0 102% 0);transition:clip-path 1s var(--ease)}
+.js .rv-type.in{clip-path:inset(0 0 -2% 0)}
+.js .rv-up{opacity:0;transform:translateY(22px);transition:opacity .7s ease-out,transform .9s var(--ease)}
+.js .rv-up.in{opacity:1;transform:none}
+.js .rv-zoom img{transform:scale(1.07);transition:transform 1.5s var(--ease)}
+.js .rv-zoom.in img{transform:scale(1)}
+[data-d="1"]{transition-delay:.09s}
+[data-d="2"]{transition-delay:.18s}
+[data-d="3"]{transition-delay:.27s}
+@media(prefers-reduced-motion:reduce){
+  .rv,.rv-type,.rv-up,.rv-zoom img{transition:none!important;opacity:1!important;transform:none!important;clip-path:none!important}
+  .hand>svg path{transition:none;stroke-dashoffset:0}
+}
+</style>
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body><div style="position:fixed;left:0;right:0;top:0;z-index:9999;background:#2E3866;color:#fff;
+padding:9px 16px;font:600 14px/1.5 -apple-system,'Apple SD Gothic Neo',sans-serif;
+display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap">
+<b>② 종이와 명조</b><span style="opacity:.8;font-weight:400">미색 종이 지면 · 「일본어」만 명조 · 낙관 도장 · 따뜻</span>
+<a href="../../interview/#designs" style="background:rgba(255,255,255,.2);color:#fff;text-decoration:none;
+padding:4px 12px;border-radius:99px;font-size:13px">← 고르러 돌아가기</a></div>
+<div style="height:44px"></div>
+
+<!-- ============ HEADER ============ -->
+<header class="hdr wrap">
+  <a class="brandmark" href="#">
+    <img src="../../assets/img/crest-128.png" width="38" height="38" alt="와가마마스쿨 크레스트">
+    <span>
+      <b class="en">Wagamama School</b>
+      <span>와가마마스쿨 · 일본어</span>
+    </span>
+  </a>
+  <nav class="nav">
+    <a href="#contrast">수업</a>
+    <a href="#community">커뮤니티</a>
+    <a href="#contact">오시는 길</a>
+    <a class="navcta" href="#contact">체험수업</a>
+  </nav>
+</header>
+
+<!-- ============ 1. HERO ============ -->
+<section class="hero wrap">
+  <div class="hero__grid">
+
+    <p class="hero__eyebrow rv in">
+      <span class="mincho">わがままスクール</span>
+      <span class="since">since 2014</span>
+    </p>
+
+    <h1 class="display rv-type">
+      교과서의 일본어가 아니라,<br>
+      일본인 친구들이 쓰는<br>
+      <em>일본어</em>를 배웁니다
+    </h1>
+
+    <div class="hero__body">
+      <p class="lead hero__lead rv-up" data-d="1">
+        문법이 틀려서가 아닙니다. 같은 상황에서 일본인이 고르는 말이 따로 있고,
+        교과서는 거기까지 싣지 못합니다. 와가마마스쿨은 2014년부터 그 차이를 가르쳐 왔습니다.
+        한 테이블에 둘러앉아, 시험이 아니라 대화를 연습합니다.
+      </p>
+
+      <div class="hero__cta rv-up" data-d="2">
+        <a class="btn btn--solid" href="#contact">체험수업 신청하기</a>
+        <a class="btn btn--ghost" href="#contact">카카오톡으로 문의하기</a>
+      </div>
+
+      <div class="hero__note rv-up" data-d="3">
+        <span class="seal" aria-hidden="true">わ</span>
+        <p>
+          <span class="hand">수업을 한 번 보고 결정하셔도 됩니다.<svg viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true"><path d="M2 8.4C46 3.6 104 3 148 5.6c44 2.6 96 3 150-2.2"/></svg></span><br>
+          등록을 먼저 권하지 않습니다.
+        </p>
+      </div>
+    </div>
+
+    <figure class="hero__fig fig rv-zoom">
+      <div class="shot">
+        <img src="../../assets/img/crop-atmos-880.jpg" width="880" height="1100"
+             alt="테이블에 둘러앉아 이야기하는 와가마마스쿨 수업 장면">
+      </div>
+      <div class="floatcard rv-up" data-d="2">
+        <span class="l en">A table, not a lecture hall</span>
+        <p>선생님을 마주 보고 앉는 대신, 옆자리 사람과 이야기하게 되는 자리입니다.</p>
+      </div>
+    </figure>
+
+  </div>
+</section>
+
+<!-- ============ 2. 사실 띠 ============ -->
+<section class="facts wrap">
+  <div class="facts__grid">
+    <div class="fact rv-up">
+      <span class="l">Since</span>
+      <span class="v"><span class="num en">2014</span><small>년부터</small></span>
+    </div>
+    <div class="fact rv-up" data-d="1">
+      <span class="l">Teacher</span>
+      <span class="v">먼저 배운<br>한국인 선생님</span>
+    </div>
+    <div class="fact rv-up" data-d="2">
+      <span class="l">Class</span>
+      <span class="v">테이블 하나에<br>둘러앉는 소그룹</span>
+    </div>
+    <div class="fact rv-up" data-d="3">
+      <span class="l">First step</span>
+      <span class="v">첫 수업은<br>무료 체험</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. 교과서 ↔ 진짜 ============ -->
+<section class="contrast wrap" id="contrast">
+  <span class="ghost" aria-hidden="true">わ</span>
+  <div class="inner">
+
+    <div class="contrast__head">
+      <p class="kicker rv">Textbook &nbsp;/&nbsp; Real</p>
+      <h2 class="h rv-type">
+        틀린 문장이 아니라,<br>
+        쓰이지 않는 문장입니다
+      </h2>
+    </div>
+
+    <div class="pair">
+      <figure class="card card--text rv-up">
+        <span class="tag">교과서</span>
+        <p class="say">「はじめまして。<br>私はキムです。」</p>
+        <p class="ko">처음 뵙겠습니다. 저는 김입니다.</p>
+      </figure>
+
+      <figure class="card card--real rv-up" data-d="1">
+        <span class="tag">진짜</span>
+        <p class="say">「キムです。<br>よろしく〜」</p>
+        <p class="ko">김이야. 잘 부탁해~</p>
+      </figure>
+
+      <div class="pair__cap rv-up" data-d="2">
+        <span class="seal" aria-hidden="true">印</span>
+        <p>같은 자리에서, 일본인은 이렇게 말합니다.</p>
+      </div>
+    </div>
+
+    <div class="notesrow">
+      <figure class="print rv-up">
+        <span class="tape" aria-hidden="true"></span>
+        <img src="../../assets/img/crop-notes-500.jpg" width="500" height="395" alt="손으로 쓴 일본어 노트">
+        <figcaption>수업 중 받아 적은 표현</figcaption>
+      </figure>
+      <figure class="print rv-up" data-d="1">
+        <img src="../../assets/img/crop-katakana-560.jpg" width="560" height="445" alt="교실 벽에 붙은 가타카나 50음도">
+        <figcaption>教室 · かたかな</figcaption>
+      </figure>
+      <div class="side small rv-up" data-d="2">
+        말끝 하나, 조사 하나가 바뀌면 사이가 달라집니다.
+        와가마마스쿨은 그 한 칸의 차이를 매 수업에서 다룹니다 —
+        <span class="mincho" lang="ja">敬語</span>와 <span class="mincho" lang="ja">タメ口</span>를
+        따로 배우는 게 아니라, 누구에게 무엇을 말하는 자리인지부터 정합니다.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 4. 풀블리드 가로 띠 ============ -->
+<figure class="strip fig rv-zoom">
+  <img src="../../assets/img/crop-wide-1920.jpg" width="1920" height="823"
+       alt="교실 전경 — 열 명 남짓이 테이블에 둘러앉아 있다">
+  <figcaption>
+    <span>Wagamama School &nbsp;·&nbsp; a room where everyone talks</span>
+    <span>한 교실, 한 테이블</span>
+  </figcaption>
+</figure>
+
+<!-- ============ 5. 커뮤니티 (클라이맥스 색면) ============ -->
+<section class="community" id="community">
+  <svg class="deckle" viewBox="0 0 1200 26" preserveAspectRatio="none" aria-hidden="true">
+    <path fill="currentColor" d="M0 0h1200v9.5c-52 4-88-2.5-140-1.2-58 1.4-96 7.4-154 6.6-60-.8-98-7-158-5.6-56 1.3-92 8.2-148 8-58-.2-96-7.4-154-6.2-52 1-86 6.6-138 5.4C56 15.6 34 12 0 13.8Z"/>
+  </svg>
+
+  <div class="inner wrap">
+    <p class="kicker rv" style="color:rgba(251,247,239,.72)">Outside the classroom</p>
+    <h2 class="h rv-type" style="margin-top:16px">
+      소풍을 가고, 수학여행을 떠나고,<br>
+      운동회를 엽니다
+    </h2>
+    <p class="lead rv-up" data-d="1">
+      배운 말은 교실 밖에서 쓰이기 시작합니다. 와가마마스쿨은 수업이 끝나는 자리에서
+      멈추지 않고, 일본인 친구들과 함께 하루를 보내는 자리를 만들어 왔습니다.
+    </p>
+
+    <div class="acts">
+      <div class="act rv-up">
+        <span class="jpname" lang="ja">遠足</span>
+        <span class="koname">봄 소풍</span>
+        <div class="slot">사진 준비 중</div>
+      </div>
+      <div class="act rv-up" data-d="1">
+        <span class="jpname" lang="ja">修学旅行</span>
+        <span class="koname">수학여행</span>
+        <div class="slot">사진 준비 중</div>
+      </div>
+      <div class="act rv-up" data-d="2">
+        <span class="jpname" lang="ja">運動会</span>
+        <span class="koname">가을 운동회</span>
+        <div class="slot">사진 준비 중</div>
+      </div>
+    </div>
+
+    <p class="wordmark rv-type">
+      Wagamama&nbsp;School
+      <small>와가마마스쿨 · 일본어 회화 · since 2014</small>
+    </p>
+  </div>
+</section>
+
+<!-- ============ 6. 닫는 CTA + 연락처 ============ -->
+<section class="closing wrap" id="contact">
+  <h2 class="h rv-type">첫 수업은<br>보고 정하셔도 됩니다</h2>
+  <div class="side rv-up" data-d="1">
+    <p class="lead prose">
+      체험수업은 진행 중인 반에 한 자리를 내어 드리는 방식입니다.
+      말을 하지 않고 앉아만 계셔도 괜찮습니다.
+    </p>
+    <div class="btns">
+      <a class="btn btn--solid" href="#">체험수업 신청하기</a>
+      <a class="btn btn--ghost" href="#">카카오톡으로 문의하기</a>
+    </div>
+  </div>
+</section>
+
+<footer class="foot wrap">
+  <div class="brandmark">
+    <img src="../../assets/img/crest-128.png" width="34" height="34" alt="">
+    <span>
+      <b class="en" style="font-size:17px">Wagamama School</b>
+      <span>와가마마스쿨</span>
+    </span>
+  </div>
+  <dl>
+    <dt>Tel</dt><dd><span class="ph">{{PHONE}}</span></dd>
+    <dt>Addr</dt><dd><span class="ph">{{ADDRESS}}</span></dd>
+    <dt>Kakao</dt><dd><span class="ph">{{KAKAO_CHANNEL}}</span></dd>
+    <dt>Hours</dt><dd><span class="ph">{{HOURS}}</span></dd>
+  </dl>
+  <p class="micro" style="max-width:19em">
+    표기된 연락처는 확정 전 자리표시자입니다.<br>
+    © 와가마마스쿨 · Wagamama School
+  </p>
+</footer>
+
+<script>
+(function(){
+  var els = [].slice.call(document.querySelectorAll('.rv,.rv-up,.rv-type,.rv-zoom,.hand'));
+  var ticking = false;
+  function reveal(){
+    ticking = false;
+    var h = window.innerHeight || document.documentElement.clientHeight;
+    for (var i = els.length - 1; i >= 0; i--){
+      var el = els[i], r = el.getBoundingClientRect();
+      if (r.top < h * 0.94 && r.bottom > -80){ el.classList.add('in'); els.splice(i,1); }
+    }
+  }
+  function onScroll(){ if(!ticking){ ticking = true; requestAnimationFrame(reveal); } }
+  reveal();
+  addEventListener('scroll', onScroll, {passive:true});
+  addEventListener('resize', onScroll);
+  addEventListener('load', reveal);
+  setTimeout(reveal, 300);
+})();
+</script>
+</body>
+</html>
